@@ -27,7 +27,7 @@ const GoogleAd: React.FC<GoogleAdProps> = ({ slot, className }) => {
     <ins
       className={`adsbygoogle ${className ?? ""}`}
       style={{ display: "block" }}
-      data-ad-client="ca-pub-8101539968683225"
+      data-ad-client={process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT}
       data-ad-slot={slot}
       data-ad-format="auto"
       data-full-width-responsive="true"

@@ -251,7 +251,7 @@ const CategoryPage: NextPage<CategoryPageProps> = ({ category, posts, yojnaPosts
               <Card>
                 <CardContent className="py-12 text-center">
                   <p className="text-gray-500 text-lg">
-                    No posts found in this category yet.
+                    No posts found in this ®category yet.
                   </p>
                 </CardContent>
               </Card>
@@ -274,9 +274,6 @@ const CategoryPage: NextPage<CategoryPageProps> = ({ category, posts, yojnaPosts
                      <>
                       <div className="sm:block lg:hidden">
                         <GoogleAd slot="4546556493" />
-                      </div>
-                      <div className="hidden sm:hidden lg:block">
-                        <GoogleAd slot="2064519922" />
                       </div>
                      </>
                     }

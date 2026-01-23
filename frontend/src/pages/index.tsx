@@ -98,9 +98,6 @@ const HomePage: NextPage<HomePageProps> = ({ categories, posts, categoriesWithPo
             <div className="sm:block lg:hidden">
               <GoogleAd slot="4546556493" />
             </div>
-            <div className="hidden sm:hidden lg:block">
-              <GoogleAd slot="2064519922" />
-            </div>
             {/* <AdBanner text="Google Ads Section" className="h-88" /> */}
             <MidCards 
               categoriesWithPosts={categoriesWithPosts}
@@ -108,17 +105,11 @@ const HomePage: NextPage<HomePageProps> = ({ categories, posts, categoriesWithPo
             <div className="sm:block lg:hidden">
               <GoogleAd slot="4546556493" />
             </div>
-            <div className="hidden sm:hidden lg:block">
-              <GoogleAd slot="2064519922" />
-            </div>
             <MockTestSection series={series} />
             {/* <CurrentAffairsSection /> */}
             <CourseSection courses={courses} />
             <div className="sm:block lg:hidden">
               <GoogleAd slot="4546556493" />
-            </div>
-            <div className="hidden sm:hidden lg:block">
-              <GoogleAd slot="2064519922" />
             </div>
             <AboutSection />
             <FaqSection />

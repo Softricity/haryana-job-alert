@@ -43,11 +43,11 @@ export default function Document() {
             fbq('track', 'PageView');
           `}
         </Script>
-        <Script
+        <script
           async
           src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT}`}
           crossOrigin="anonymous"
-        ></Script>
+        ></script>
         <noscript>
           <img
             height="1"

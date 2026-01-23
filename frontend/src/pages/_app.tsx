@@ -63,21 +63,7 @@ export default function App({ Component, pageProps }: AppProps) {
       Router.events.off("routeChangeComplete", end);
       Router.events.off("routeChangeError", end);
     };
-  }, []);
-
-  const blockedRoutes = [
-    "/admin",
-    "/auth",
-    "/dashboard",
-    "/login",
-    "/signup",
-    "/profile",
-    "/settings",
-  ];
-
-  const shouldBlockAds = blockedRoutes.some((route) =>
-    router.pathname.startsWith(route),
-  );
+  }, [])
 
   useEffect(() => {
     const handleRouteChange = (url: string) => {

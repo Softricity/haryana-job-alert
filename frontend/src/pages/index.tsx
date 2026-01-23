@@ -102,15 +102,9 @@ const HomePage: NextPage<HomePageProps> = ({ categories, posts, categoriesWithPo
             <MidCards 
               categoriesWithPosts={categoriesWithPosts}
             />
-            <div className="sm:block lg:hidden">
-              <GoogleAd slot="4546556493" />
-            </div>
             <MockTestSection series={series} />
             {/* <CurrentAffairsSection /> */}
             <CourseSection courses={courses} />
-            <div className="sm:block lg:hidden">
-              <GoogleAd slot="4546556493" />
-            </div>
             <AboutSection />
             <FaqSection />
             </div>

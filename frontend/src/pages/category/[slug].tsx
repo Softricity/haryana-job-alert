@@ -270,13 +270,6 @@ const CategoryPage: NextPage<CategoryPageProps> = ({ category, posts, yojnaPosts
                 {processedPosts.map((post, index) => {
                   return (
                     <>
-                    {index % 12 === 0 && 
-                     <>
-                      <div className="sm:block lg:hidden">
-                        <GoogleAd slot="4546556493" />
-                      </div>
-                     </>
-                    }
                     <Link href={`/posts/${post.slug}`} key={post.id} className="block bg-white group transition-all duration-200 rounded-lg shadow-xl border-gray-200 overflow-hidden relative">
                       <div className="flex flex-row justify-between items-end md:items-center gap-4 px-4 py-2 w-full h-full">
                         <div className="flex-grow">

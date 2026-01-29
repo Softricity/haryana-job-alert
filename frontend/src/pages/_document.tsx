@@ -12,11 +12,6 @@ export default function Document() {
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
-        <script
-          async
-          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT}`}
-          crossOrigin="anonymous"
-        ></script>
         <link
           href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
           rel="stylesheet"
@@ -61,10 +56,11 @@ export default function Document() {
         <Main />
         <NextScript />
         <Script src="https://checkout.razorpay.com/v1/checkout.js"></Script>
-        <Script
+        <script
           async
-          src="https://cdn.razorpay.com/widgets/trusted-badge.js"
-        ></Script>
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8101539968683225"
+          crossOrigin="anonymous"
+        ></script>
       </body>
     </Html>
   );

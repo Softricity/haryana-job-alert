@@ -216,10 +216,13 @@ export class PostsService {
           },
         },
       },
-      include: {
-        categories: true,
-        post_templates: true,
-        post_tags: { include: { tags: true } },
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        category_id: true,
+        created_at: true,
+        // Add more fields if needed, but do NOT include html/content
       },
       orderBy: { created_at: 'desc' },
       take: limit,

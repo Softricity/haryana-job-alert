@@ -75,9 +75,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
 
     const yojnaPosts = yojnaData?.posts || [];
 
-    // Log lengths for debugging
-    console.log('Fetched categories:', posts);
-
     return { props: { categories, posts, categoriesWithPosts, yojnaPosts, series: [], courses: [] } };
   } catch (error) {
     console.error("Failed to fetch data for homepage:", error);

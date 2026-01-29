@@ -56,11 +56,11 @@ export default function Document() {
         <Main />
         <NextScript />
         <Script src="https://checkout.razorpay.com/v1/checkout.js"></Script>
-        <script
-          async
+        <Script
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8101539968683225"
           crossOrigin="anonymous"
-        ></script>
+          strategy="lazyOnload"
+        />
       </body>
     </Html>
   );

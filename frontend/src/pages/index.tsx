@@ -96,7 +96,7 @@ const HomePage: NextPage<HomePageProps> = ({ categories, posts, categoriesWithPo
             <div className="lg:col-span-3 flex flex-col gap-6">
             <PostsSection posts={posts} />
             <div>
-              <GoogleAd slot="4546556493" />
+              {/* <GoogleAd slot="4546556493" /> */}
             </div>
             {/* <AdBanner text="Google Ads Section" className="h-88" /> */}
             <MidCards 

@@ -15,15 +15,15 @@ import { ThirdPartyScripts } from "@/components/ThirdPartyScripts";
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
-  variable: "--font-poppins",
   display: "swap",
 });
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
-  variable: "--font-playfair",
   display: "swap",
 });
+
+
 
 // This component handles the protection logic
 const AdminAuthGuard = ({ children }: { children: ReactNode }) => {

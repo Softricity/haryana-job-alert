@@ -70,9 +70,10 @@ export class PostsController {
   @Get('summary')
   findSummaryByCategories(
     @Query('limit') limit?: string,
+    @Query('categories') categories?: string,
   ) {
     const take = Number.isFinite(Number(limit)) ? Number(limit) : 25;
-    return this.postsService.findSummaryByCategories(take);
+    return this.postsService.findSummaryByCategories(take, categories);
   }
 
   @Get('latest')

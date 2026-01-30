@@ -326,10 +326,20 @@ export class PostsService {
    * Return summarized posts (only select fields) for each category.
    * Useful for homepage cards where full HTML content is not needed.
    */
-  async findSummaryByCategories(limit = 25) {
+  async findSummaryByCategories(limit = 25, categoryNames?: string) {
     // Optimized: Fetch categories and their latest posts in a single query
     // distinct queries vs single query: Prisma handles 'take' inside relations efficiently
+
+    const whereClause: any = {};
+    if (categoryNames) {
+      const names = categoryNames.split(',').map(n => n.trim());
+      if (names.length > 0) {
+        whereClause.name = { in: names };
+      }
+    }
+
     return this.prisma.categories.findMany({
+      where: whereClause,
       orderBy: { name: 'asc' },
       select: {
         id: true,

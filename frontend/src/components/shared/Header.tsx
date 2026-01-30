@@ -151,7 +151,7 @@ export default function Header({
     alt="Header background"
     fill
     priority
-    quality={85}
+    quality={50}
     sizes="100vw"
     className="object-cover object-center"
   />

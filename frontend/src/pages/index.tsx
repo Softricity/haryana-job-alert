@@ -55,27 +55,36 @@ interface HomePageProps {
 }
 
 export const getStaticProps = async () => {
-  const [categories, posts, categoriesWithPosts, yojnaData, carouselItems] =
-    await Promise.all([
-      api.get('/categories'),
-      api.get(`/posts/latest?category=Latest Jobs&limit=8`),
-      api.get('/posts/summary?limit=25'),
-      api.get('/categories/slug/yojna/posts?limit=12'),
-      api.get('/carousel'),
-    ]);
+  try {
+    const data = await api.get('/homepage');
 
-  return {
-    props: {
-      categories,
-      posts,
-      categoriesWithPosts,
-      yojnaPosts: yojnaData?.posts || [],
-      series: [],
-      courses: [],
-      carouselItems: carouselItems || [],
-    },
-    revalidate: 300, // 5 minutes
-  };
+    return {
+      props: {
+        categories: data.categories || [],
+        posts: data.posts || [],
+        categoriesWithPosts: data.categoriesWithPosts || [],
+        yojnaPosts: data.yojnaPosts || [],
+        series: [],
+        courses: [],
+        carouselItems: data.carouselItems || [],
+      },
+      revalidate: 60, // 1 minute
+    };
+  } catch (error) {
+    console.error("Failed to fetch homepage data:", error);
+    return {
+      props: {
+        categories: [],
+        posts: [],
+        categoriesWithPosts: [],
+        yojnaPosts: [],
+        series: [],
+        courses: [],
+        carouselItems: [],
+      },
+      revalidate: 60,
+    };
+  }
 };
 
 

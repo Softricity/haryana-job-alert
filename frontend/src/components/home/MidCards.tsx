@@ -37,7 +37,7 @@ interface MidCardProps {
 // Reusable component for a single card
 const MidCard = ({ title, description, posts, index, categorySlug }: MidCardProps) => {
 
-  const maxPosts = 25;
+  const maxPosts = 15;
   const displayedPosts = posts.slice(0, maxPosts);
   const hasMorePosts = posts.length === maxPosts;
 

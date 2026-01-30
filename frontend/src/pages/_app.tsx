@@ -10,6 +10,7 @@ import Router from "next/router";
 import { HeroUIProvider } from "@heroui/react";
 import { Poppins } from "next/font/google";
 import Script from "next/script";
+import { ThirdPartyScripts } from "@/components/ThirdPartyScripts";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -78,6 +79,8 @@ export default function App({ Component, pageProps }: AppProps) {
     };
   }, [router.events]);
 
+
+
   return (
     <AuthProvider>
       {loading && (
@@ -98,6 +101,7 @@ export default function App({ Component, pageProps }: AppProps) {
           <Component {...pageProps} />
         </main>
       )}
+      <ThirdPartyScripts />
     </AuthProvider>
   );
 }

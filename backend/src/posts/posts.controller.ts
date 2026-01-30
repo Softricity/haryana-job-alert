@@ -44,8 +44,14 @@ export class PostsController {
   }
 
   @Get()
-  findAll() {
-    return this.postsService.findAll();
+  findAll(
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+    @Query('search') search?: string,
+  ) {
+    const pageNumber = Number.isFinite(Number(page)) ? Number(page) : 1;
+    const limitNumber = Number.isFinite(Number(limit)) ? Number(limit) : 20;
+    return this.postsService.findAll(pageNumber, limitNumber, search);
   }
 
   // Search posts by query string

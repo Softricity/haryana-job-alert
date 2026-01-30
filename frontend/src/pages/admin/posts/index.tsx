@@ -1,6 +1,7 @@
-import { GetServerSideProps, NextPage } from "next";
+import { NextPage } from "next";
 import { api } from "@/lib/api";
-import { PostsClient } from "@/components/admin/posts/PostsClient"; // We will create this next
+import { PostsClient } from "@/components/admin/posts/PostsClient";
+import React, { useCallback, useEffect, useState } from "react";
 
 export type Post = {
   id: string;
@@ -22,34 +23,78 @@ export type Post = {
     name: string;
   } | null;
 };
-interface PostsPageProps {
-  posts: Post[];
-}
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  try {
-    const posts = await api.get('/posts');
-    return {
-      props: { posts },
-    };
-  } catch (error) {
-    console.error("Failed to fetch posts:", error);
-    return {
-      props: { posts: [] },
-    };
-  }
-};
+const AllPostsPage: NextPage = () => {
+    const [posts, setPosts] = useState<Post[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [pagination, setPagination] = useState({
+      page: 1,
+      limit: 20,
+      totalPages: 1,
+      total: 0,
+    });
+    const [search, setSearch] = useState("");
+  
+    const fetchPosts = useCallback(async (page: number, searchQuery: string) => {
+      setLoading(true);
+      try {
+        const queryParams = new URLSearchParams({
+            page: page.toString(),
+            limit: "20",
+        });
+        if (searchQuery) queryParams.append("search", searchQuery);
 
-const AllPostsPage: NextPage<PostsPageProps> = ({ posts }) => {
-  return (
-    <div className="py-4 px-8">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold tracking-tight">All Posts</h1>
-        {/* We can add a "Create New" button here later */}
+        const res = await api.get(`/posts?${queryParams.toString()}`);
+        
+        // Backend returns: { data: Post[], meta: { total, page, limit, totalPages } }
+        if (res.data && res.meta) {
+            setPosts(res.data);
+            setPagination({
+                page: Number(res.meta.page),
+                limit: Number(res.meta.limit),
+                totalPages: Number(res.meta.totalPages),
+                total: Number(res.meta.total),
+            });
+        } else {
+             // Fallback for previous structure if backend deploy lags
+             setPosts(Array.isArray(res) ? res : []);
+        }
+      } catch (err) {
+          console.error(err);
+      } finally {
+          setLoading(false);
+      }
+    }, []);
+  
+    useEffect(() => {
+      fetchPosts(1, "");
+    }, [fetchPosts]);
+  
+    const handlePageChange = (newPage: number) => {
+        fetchPosts(newPage, search);
+    };
+    
+    const handleSearch = (query: string) => {
+        setSearch(query);
+        fetchPosts(1, query);
+    }
+  
+    return (
+      <div className="py-4 px-8">
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-3xl font-bold tracking-tight">All Posts</h1>
+          {/* We can add a "Create New" button here later */}
+        </div>
+        <PostsClient 
+          data={posts} 
+          categories={[]} // Categories filter temporarily disabled or fetch if needed
+          pagination={pagination}
+          onPageChange={handlePageChange}
+          onSearch={handleSearch}
+          loading={loading}
+        />
       </div>
-      <PostsClient data={posts} />
-    </div>
-  );
+    );
 };
 
 export default AllPostsPage;

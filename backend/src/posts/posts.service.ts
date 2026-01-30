@@ -5,7 +5,7 @@ import { UpdatePostDto } from './dto/update-post.dto';
 
 @Injectable()
 export class PostsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async create(createPostDto: CreatePostDto, userId: number) {
     const { tags, ...postData } = createPostDto;
@@ -18,12 +18,12 @@ export class PostsService {
         created_by: userId,
         post_tags: tags
           ? {
-              create: tags.map((tagId) => ({
-                tags: {
-                  connect: { id: tagId },
-                },
-              })),
-            }
+            create: tags.map((tagId) => ({
+              tags: {
+                connect: { id: tagId },
+              },
+            })),
+          }
           : undefined,
       },
       include: {
@@ -36,18 +36,61 @@ export class PostsService {
     });
   }
 
-  findAll() {
-    return this.prisma.posts.findMany({
-      include: {
-        categories: true,
-        post_templates: true,
-        post_tags: { include: { tags: true } },
+  async findAll(page: number, limit: number, search?: string) {
+    const skip = (page - 1) * limit;
+
+    const whereClause = search
+      ? {
+        OR: [
+          { title: { contains: search, mode: 'insensitive' as const } },
+          { description: { contains: search, mode: 'insensitive' as const } },
+        ],
+      }
+      : {};
+
+    const [posts, total] = await this.prisma.$transaction([
+      this.prisma.posts.findMany({
+        where: whereClause,
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          created_at: true,
+          published_at: true,
+          thumbnail_url: true,
+          category_id: true,
+          description: true,
+          categories: {
+            select: { name: true },
+          },
+          post_tags: {
+            select: {
+              tags: {
+                select: { name: true, id: true },
+              },
+            },
+          },
+        },
+        orderBy: { created_at: 'desc' },
+        skip,
+        take: limit,
+      }),
+      this.prisma.posts.count({ where: whereClause }),
+    ]);
+
+    return {
+      data: posts,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
       },
-      orderBy: { created_at: 'desc' },
-    });
+    };
   }
 
   async findOne(id: number) {
+    // ... (unchanged findOne implementation) ...
     const post = await this.prisma.posts.findUnique({
       where: { id },
       include: {
@@ -64,6 +107,7 @@ export class PostsService {
   }
 
   async update(id: number, updatePostDto: UpdatePostDto) {
+    // ... (unchanged update implementation logic) ...
     await this.findOne(id);
     const { tags, ...postData } = updatePostDto;
 
@@ -84,12 +128,12 @@ export class PostsService {
           post_tags:
             tags && tags.length > 0
               ? {
-                  create: tags.map((tagId) => ({
-                    tags: {
-                      connect: { id: tagId },
-                    },
-                  })),
-                }
+                create: tags.map((tagId) => ({
+                  tags: {
+                    connect: { id: tagId },
+                  },
+                })),
+              }
               : undefined,
         },
         include: {
@@ -121,10 +165,25 @@ export class PostsService {
   async findByCategory(categoryId: number) {
     return this.prisma.posts.findMany({
       where: { category_id: categoryId },
-      include: {
-        categories: true,
-        post_templates: true,
-        post_tags: { include: { tags: true } },
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        created_at: true,
+        published_at: true,
+        thumbnail_url: true,
+        category_id: true,
+        description: true,
+        categories: {
+          select: { name: true },
+        },
+        post_tags: {
+          select: {
+            tags: {
+              select: { name: true, id: true },
+            },
+          },
+        },
       },
       orderBy: { created_at: 'desc' },
     });
@@ -141,10 +200,25 @@ export class PostsService {
           },
         },
       },
-      include: {
-        categories: true,
-        post_templates: true,
-        post_tags: { include: { tags: true } },
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        created_at: true,
+        published_at: true,
+        thumbnail_url: true,
+        category_id: true,
+        description: true,
+        categories: {
+          select: { name: true },
+        },
+        post_tags: {
+          select: {
+            tags: {
+              select: { name: true, id: true },
+            },
+          },
+        },
       },
       orderBy: { created_at: 'desc' },
     });

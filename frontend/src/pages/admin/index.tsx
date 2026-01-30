@@ -173,7 +173,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
       api.get('/courses'),
       api.get('/mock-series'),
       api.get('/mock-tests'),
-      api.get('/posts'),
+      api.get('/posts?limit=6'), // Fetch enough for "Recent Posts" (5 needed)
     ]);
 
     // Helper to safely get the data (in case it's wrapped, e.g., res.data)
@@ -181,8 +181,13 @@ export const getServerSideProps: GetServerSideProps = async () => {
 
     const courses = getData(coursesRes);
     const mockSeries = getData(mockSeriesRes);
-    const posts = getData(postsRes);
     const mockTests = getData(mockTestsRes);
+    
+    // Handle Paginated Posts Response
+    // postsRes structure: { data: Post[], meta: { total, ... } }
+    const posts = postsRes.data || [];
+    const postCount = postsRes.meta?.total || posts.length;
+
     const totalCourseEnrollments = courses.reduce((sum: number, course: any) =>
       sum + (course.enrolled_users_count || 0), 0
     );
@@ -196,7 +201,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
       courseCount: courses.length,
       seriesCount: mockSeries.length,
       testCount: mockTests.length,
-      postCount: posts.length,
+      postCount: postCount, // Use the total from metadata
       totalCourseEnrollments,
       totalSeriesEnrollments,
     };
@@ -222,8 +227,8 @@ export const getServerSideProps: GetServerSideProps = async () => {
       }));
 
     // 5. Get Recent Posts (as a fallback for "Recent Enrollments")
-    const recentPosts = [...posts]
-      .sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+    const recentPosts = posts
+      // .sort(...) // Already sorted by backend (created_at desc)
       .slice(0, 5)
       .map((post: any) => ({
         id: post.id,
@@ -235,7 +240,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
         kpis,
         popularCourses,
         popularSeries,
-        recentPosts, // Changed from recentEnrollments
+        recentPosts, 
       }
     };
 
@@ -244,7 +249,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
     // This will catch auth errors (e.g., if you can't access /users)
     return {
       props: {
-        kpis: { courseCount: 0, seriesCount: 0, testCount: 0, postCount: 0, totalRevenue: 0 },
+        kpis: { courseCount: 0, seriesCount: 0, testCount: 0, postCount: 0, totalRevenue: 0, totalCourseEnrollments: 0, totalSeriesEnrollments: 0 },
         popularCourses: [],
         popularSeries: [],
         recentPosts: [],

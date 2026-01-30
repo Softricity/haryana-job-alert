@@ -136,49 +136,68 @@ export default function Header() {
           </div>
         </div>
 
-        <div>
-          <div
-            className="relative bg-center bg-cover h-27 sm:h-35 w-full"
-            // className="relative bg-center bg-cover h-27 sm:h-35 w-full bg-gradient-to-br from-[#0C342B] to-[#1D6F50]"
-            style={{ backgroundImage: "url('/header.jpg')" }}
-            // @ts-ignore
-            fetchPriority="high"
-          >
-            <ul className="circles">
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-              <li></li>
-            </ul>
-            <div className="absolute top-6 sm:top-6 left-[45vw] translate-x-[-50%] sm:left-[48vw] flex flex-col items-end">
-              <h1 className="text-3xl sm:text-4xl font-bold text-white z-10 flex items-center">
-                <img src="/logo.jpg" alt="" className="inline w-9 sm:w-13 mr-2.5" />
-                <div className="text-nowrap">Haryana <span className="text-[#fdf500] text-nowrap">Job Alert</span></div>
-              </h1>
-              <img src="/header-arrow.jpg" alt="" className="h-4 w-30 sm:w-40 object-cover -mt-2 sm:-mt-3 -mr-10 sm:mr-0 lg:block hidden" />
+<div className="relative h-30 sm:h-35 w-full overflow-hidden">
+  {/* Background Image */}
+  <Image
+    src="/header.jpg"
+    alt="Header background"
+    fill
+    priority
+    sizes="100vw"
+    className="object-cover object-center"
+  />
 
-              <span className="sm:hidden relative inline-flex -top-12 -right-16 items-center justify-center px-2.5 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full ml-2 ">
-                <span className="absolute -right-1 -top-1 h-3 w-3 rounded-full bg-red-600 animate-ping"></span>
-                LIVE
-              </span>
-            </div>
+  {/* Optional overlay (if needed) */}
+  {/* <div className="absolute inset-0 bg-black/20" /> */}
 
-            <div className="absolute lg:block playfair text-xl !font-light hidden top-14 text-white left-[65vw] z-20">
-              theharyana<span className="text-[#fdf500]">jobalert</span>.com
-            </div>
-{/* 
-            <a href='https://softricity.in' className="text-white shine inline-flex items-center rounded-xl h-8 text-xs px-1 sm:text-sm absolute top-4 sm:top-24 left-1/2 translate-x-[-50%] sm:translate-x-0 sm:left-[85vw]">
-              <span className="lg:inline hidden">Powered by</span> <img src="/softricity.png" alt="" className='ml-0 sm:ml-2 inline h-7 sm:h-15 w-23 sm:w-[100px] object-cover' />
-            </a> */}
-          </div>
-        </div>
+  <ul className="circles relative z-10">
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+  </ul>
+
+  <div className="absolute top-6 sm:top-6 left-[45vw] translate-x-[-50%] sm:left-[48vw] flex flex-col items-end z-20">
+    <h1 className="text-3xl sm:text-4xl font-bold text-white flex items-center">
+      <Image
+        src="/logo.jpg"
+        alt="Logo"
+        width={52}
+        height={52}
+        className="mr-2.5"
+        priority
+      />
+      <div className="text-nowrap">
+        Haryana <span className="text-[#fdf500]">Job Alert</span>
+      </div>
+    </h1>
+
+    <Image
+      src="/header-arrow.jpg"
+      alt=""
+      width={160}
+      height={24}
+      className="h-4 sm:h-auto w-30 sm:w-40 object-cover -mt-2 sm:-mt-3 -mr-10 sm:mr-0 lg:block hidden"
+    />
+
+    <span className="sm:hidden relative inline-flex -top-15 -right-20 items-center justify-center px-2.5 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full ml-2">
+      <span className="absolute -right-1 -top-1 h-3 w-3 rounded-full bg-red-600 animate-ping"></span>
+      LIVE
+    </span>
+  </div>
+
+  <div className="absolute lg:block playfair text-xl !font-light hidden top-14 text-white left-[65vw] z-20">
+    theharyana<span className="text-[#fdf500]">jobalert</span>.com
+  </div>
+</div>
+
 
         <nav className="lg:container mx-auto px-4 mt-2 sm:mt-5 relative bottom-12 sm:-top-15">
           <div className="flex items-center justify-center h-20">

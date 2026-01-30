@@ -1,11 +1,21 @@
 import { useRouter } from "next/router";
 import Script from "next/script";
+import { useEffect, useState } from "react";
 
 export const ThirdPartyScripts = () => {
   const router = useRouter();
   const isAdmin = router.pathname.startsWith("/admin");
+  const [shouldLoad, setShouldLoad] = useState(false);
 
-  if (isAdmin) {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShouldLoad(true);
+    }, 3000); // Load after 3 seconds
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isAdmin || !shouldLoad) {
     return null;
   }
 

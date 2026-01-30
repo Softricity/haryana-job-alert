@@ -68,9 +68,11 @@ export default function App({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     const handleRouteChange = (url: string) => {
-      (window as any).gtag("config", "G-Y96FVJBE7W", {
-        page_path: url,
-      });
+      if (typeof (window as any).gtag === 'function') {
+        (window as any).gtag("config", "G-Y96FVJBE7W", {
+          page_path: url,
+        });
+      }
     };
 
     router.events.on("routeChangeComplete", handleRouteChange);

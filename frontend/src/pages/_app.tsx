@@ -92,6 +92,12 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <AuthProvider>
+      <style jsx global>{`
+        :root {
+          --font-poppins: ${poppins.style.fontFamily};
+          --font-playfair: ${playfair.style.fontFamily};
+        }
+      `}</style>
       {loading && (
         <div className="max-h-screen min-h-screen max-w-screen min-w-screen fixed top-0 right-0 bg-white/60 flex justify-center items-center z-[999]">
           <div className="bg-white h-40 w-40 rounded-2xl flex items-center justify-center shadow-lg">
@@ -106,7 +112,7 @@ export default function App({ Component, pageProps }: AppProps) {
           </AdminAuthGuard>
         </HeroUIProvider>
       ) : (
-        <main className={`${poppins.variable} ${playfair.variable} font-sans`}>
+        <main className="font-sans">
           <Component {...pageProps} />
         </main>
       )}

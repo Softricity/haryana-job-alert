@@ -43,19 +43,25 @@ export type MockSeries = {
 
 interface MockTestsHomePageProps {
   series: MockSeries[];
+  headerCategories: any[];
+  carouselItems: any[];
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
   try {
-    const series = await api.get('/mock-series');
-    return { props: { series } };
+    const [series, categories, carouselItems] = await Promise.all([
+      api.get('/mock-series'),
+      api.get('/categories'),
+      api.get('/carousel'),
+    ]);
+    return { props: { series, headerCategories: categories || [], carouselItems: carouselItems || [] } };
   } catch (error) {
     console.error("Failed to fetch mock series:", error);
-    return { props: { series: [] } };
+    return { props: { series: [], headerCategories: [], carouselItems: [] } };
   }
 };
 
-const MockTestsHomePage: NextPage<MockTestsHomePageProps> = ({ series }) => {
+const MockTestsHomePage: NextPage<MockTestsHomePageProps> = ({ series, headerCategories, carouselItems }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
@@ -120,7 +126,7 @@ const MockTestsHomePage: NextPage<MockTestsHomePageProps> = ({ series }) => {
 
   return (
     <div className="bg-white min-h-screen">
-      <Header />
+      <Header preloadedCategories={headerCategories} preloadedCarousel={carouselItems} />
       <main className="container mx-auto px-4 py-12">
         <div className="text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-3">

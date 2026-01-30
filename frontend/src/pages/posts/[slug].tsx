@@ -18,29 +18,39 @@ import {
 import BannerHeader from "@/components/shared/BannerHeader";
 import Script from "next/script";
 
+interface Category {
+  id: number;
+  name: string;
+  description: string | null;
+}
+
 interface PostPageProps {
   post: Post;
   yojnaPosts: YojnaPost[];
+  categories: Category[];
+  carouselItems: any[];
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { slug } = context.params!;
   try {
-    const [post, yojnaData] = await Promise.all([
+    const [post, yojnaData, categories, carouselItems] = await Promise.all([
       api.get(`/posts/slug/${slug}`),
       api.get('/categories/slug/yojna/posts?limit=12'),
+      api.get('/categories'),
+      api.get('/carousel'),
     ]);
 
     const yojnaPosts = yojnaData?.posts || [];
 
-    return { props: { post, yojnaPosts } };
+    return { props: { post, yojnaPosts, categories: categories || [], carouselItems: carouselItems || [] } };
   } catch (error) {
     console.error(`Failed to fetch post with slug ${slug}:`, error);
     return { notFound: true };
   }
 };
 
-const PostPage: NextPage<PostPageProps> = ({ post, yojnaPosts }) => {
+const PostPage: NextPage<PostPageProps> = ({ post, yojnaPosts, categories, carouselItems }) => {
   const categorySlug = post.categories?.name.toLowerCase().replace(/\s+/g, '-') || 'uncategorized';
 
   return (
@@ -50,7 +60,7 @@ const PostPage: NextPage<PostPageProps> = ({ post, yojnaPosts }) => {
         {/* You can also add dynamic meta descriptions for SEO */}
         <meta name="description" content={`Details & Information about ${post.title}.`} />
       </Head>
-      <Header />
+      <Header preloadedCategories={categories} preloadedCarousel={carouselItems} />
       <main className="container mx-auto px-4 py-8 max-w-5xl">
         {/* NEW: Breadcrumb Navigation */}
         <Breadcrumb className="mb-4">

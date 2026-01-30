@@ -29,6 +29,7 @@ import { useSearchParams } from "next/navigation";
 import Script from "next/dist/client/script";
 import GoogleAd from "@/components/shared/GoogleAds";
 
+
 interface Category {
   id: number;
   name: string;
@@ -45,6 +46,8 @@ interface CategoryPageProps {
   totalPosts: number;
   currentPage: number;
   totalPages: number;
+  categories: Category[];
+  carouselItems: any[];
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -53,9 +56,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const limit = 20;
 
   try {
-    const [data, yojnaData] = await Promise.all([
+    const [data, yojnaData, categories, carouselItems] = await Promise.all([
       api.get(`/categories/slug/${slug}/posts?page=${page}&limit=${limit}`),
       api.get('/categories/slug/yojna/posts?limit=12'),
+      api.get('/categories'),
+      api.get('/carousel'),
     ]);
 
     const yojnaPosts = yojnaData?.posts || [];
@@ -68,6 +73,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         totalPosts: data.meta?.total || 0,
         currentPage: data.meta?.page || 1,
         totalPages: data.meta?.totalPages || 1,
+        categories: categories || [],
+        carouselItems: carouselItems || [],
       }))
     };
   } catch (error) {
@@ -76,7 +83,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 };
 
-const CategoryPage: NextPage<CategoryPageProps> = ({ category, posts, yojnaPosts, totalPosts, currentPage, totalPages }) => {
+const CategoryPage: NextPage<CategoryPageProps> = ({ category, posts, yojnaPosts, totalPosts, currentPage, totalPages, categories, carouselItems }) => {
+
   // set state query from url into selectedTag
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOrder, setSortOrder] = useState("newest");
@@ -168,7 +176,7 @@ const CategoryPage: NextPage<CategoryPageProps> = ({ category, posts, yojnaPosts
         />
       </Head>
 
-      <Header />
+      <Header preloadedCategories={categories} preloadedCarousel={carouselItems} />
       <main className="max-w-6xl mx-auto md:mt-12 grid grid-cols-1 lg:grid-cols-4 gap-8 px-4 mb-10">
         <div className="lg:col-span-3">
           <Breadcrumb className="mb-6">

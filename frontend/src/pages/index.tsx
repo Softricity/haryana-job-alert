@@ -60,34 +60,36 @@ interface HomePageProps {
   yojnaPosts: YojnaPost[];
   series: MockSeries[];
   courses: PublicCourse[];
+  carouselItems: any[];
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
   try {
-    const [categories, posts, categoriesWithPosts, yojnaData] = await Promise.all([
+    const [categories, posts, categoriesWithPosts, yojnaData, carouselItems] = await Promise.all([
       api.get('/categories'),
       api.get(`/posts/latest?category=${encodeURIComponent('Latest Jobs')}&limit=8`),
       api.get('/posts/summary?limit=25'),
       api.get('/categories/slug/yojna/posts?limit=12'),
+      api.get('/carousel'),
     ]);
 
     const yojnaPosts = yojnaData?.posts || [];
 
-    return { props: { categories, posts, categoriesWithPosts, yojnaPosts, series: [], courses: [] } };
+    return { props: { categories, posts, categoriesWithPosts, yojnaPosts, series: [], courses: [], carouselItems: carouselItems || [] } };
   } catch (error) {
     console.error("Failed to fetch data for homepage:", error);
-    return { props: { categories: [], posts: [], categoriesWithPosts: [], yojnaPosts: [], series: [], courses: [] } };
+    return { props: { categories: [], posts: [], categoriesWithPosts: [], yojnaPosts: [], series: [], courses: [], carouselItems: [] } };
   }
 };
 
-const HomePage: NextPage<HomePageProps> = ({ categories, posts, categoriesWithPosts, yojnaPosts, series, courses }) => {
+const HomePage: NextPage<HomePageProps> = ({ categories, posts, categoriesWithPosts, yojnaPosts, series, courses, carouselItems }) => {
   return (
     <div className="bg-white overflow-x-hidden">
       <Head>
         <title>Haryana Job Alert - Latest Govt Jobs, Results, Admit Cards</title>
         <meta name="description" content="Your one-stop destination for the latest government job alerts, exam results, and admit cards in Haryana and across India." />
       </Head>
-      <Header />
+      <Header preloadedCategories={categories} preloadedCarousel={carouselItems} />
       <TopLinksSection categories={categories} />
       <main className="md:p-4 container mx-auto max-w-7xl">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mt-6">

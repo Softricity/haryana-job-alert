@@ -31,20 +31,26 @@ interface PublicCourse extends Omit<Course, 'tags' | 'authors'> { // Omit admin-
 
 interface CoursesHomePageProps {
     courses: PublicCourse[];
+    headerCategories: any[];
+    carouselItems: any[];
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
     try {
         // Fetch only published courses for the public page
-        const courses = await api.get('/courses?status=published');
-        return { props: { courses } };
+        const [courses, categories, carouselItems] = await Promise.all([
+            api.get('/courses?status=published'),
+            api.get('/categories'),
+            api.get('/carousel'),
+        ]);
+        return { props: { courses, headerCategories: categories || [], carouselItems: carouselItems || [] } };
     } catch (error) {
         console.error("Failed to fetch published courses:", error);
-        return { props: { courses: [] } };
+        return { props: { courses: [], headerCategories: [], carouselItems: [] } };
     }
 };
 
-const CoursesHomePage: NextPage<CoursesHomePageProps> = ({ courses }) => {
+const CoursesHomePage: NextPage<CoursesHomePageProps> = ({ courses, headerCategories, carouselItems }) => {
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedCategory, setSelectedCategory] = useState<string>("all");
     const [selectedPricing, setSelectedPricing] = useState<string>("all");
@@ -91,7 +97,7 @@ const CoursesHomePage: NextPage<CoursesHomePageProps> = ({ courses }) => {
 
     return (
         <div className="bg-white min-h-screen">
-            <Header />
+            <Header preloadedCategories={headerCategories} preloadedCarousel={carouselItems} />
             <main className="container mx-auto px-4 py-8 mt-5">
                 <div className="text-center mb-8">
                     <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-3">Available Courses</h1>

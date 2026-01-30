@@ -45,6 +45,7 @@ interface CategoryPageProps {
   totalPosts: number;
   currentPage: number;
   totalPages: number;
+  carouselItems: any[];
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -55,10 +56,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
     // Convert slug to tag name (e.g., 'haryana-police' -> 'haryana police')
     const tagName = decodeURIComponent(String(slug)).replace(/-/g, ' ');
-    const [categories, postsData, yojnaData] = await Promise.all([
+    const [categories, postsData, yojnaData, carouselItems] = await Promise.all([
       api.get('/categories'),
       api.get(`/posts/tag/${encodeURIComponent(tagName)}?page=${page}&limit=${limit}`),
       api.get('/categories/slug/yojna/posts?limit=12'),
+      api.get('/carousel'),
     ]);
 
     const yojnaPosts = yojnaData?.posts || [];
@@ -82,6 +84,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         totalPosts: postsData.meta?.total || 0,
         currentPage: postsData.meta?.page || 1,
         totalPages: postsData.meta?.totalPages || 1,
+        carouselItems: carouselItems || []
       }))
     };
   } catch (error) {
@@ -90,7 +93,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 };
 
-const CategoryPage: NextPage<CategoryPageProps> = ({ category, posts, categories, yojnaPosts, currentPage, totalPages }) => {
+const CategoryPage: NextPage<CategoryPageProps> = ({ category, posts, categories, yojnaPosts, currentPage, totalPages, carouselItems }) => {
   // set state query from url into selectedTag
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOrder, setSortOrder] = useState("newest");
@@ -191,7 +194,7 @@ const CategoryPage: NextPage<CategoryPageProps> = ({ category, posts, categories
         />
       </Head>
 
-      <Header />
+      <Header preloadedCategories={categories} preloadedCarousel={carouselItems} />
       <main className="max-w-6xl mx-auto md:mt-12 grid grid-cols-1 lg:grid-cols-4 gap-8 px-4 mb-10">
         <div className="lg:col-span-3">
           <Breadcrumb className="mb-6">

@@ -47,7 +47,13 @@ const navLinks = [
   { name: "Admit Cards", href: "/category/admit-cards" },
 ];
 
-export default function Header() {
+export default function Header({
+  preloadedCategories,
+  preloadedCarousel,
+}: {
+  preloadedCategories?: Array<{ id: number | string; name: string; description: string | null }>;
+  preloadedCarousel?: any[];
+}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
   const [isStateOpen, setIsStateOpen] = useState(false);
@@ -58,13 +64,14 @@ export default function Header() {
   const { logout } = useAuth();
   const { user } = useAuth();
   const [categories, setCategories] = useState<
-    Array<{ id: number; name: string; description: string | null }>
-  >([]);
+    Array<{ id: number | string; name: string; description: string | null }>
+  >(preloadedCategories || []);
   const isLoggedIn = !!user;
-  const [carouselItems, setCarouselItems] = useState<any[]>([]);
+  const [carouselItems, setCarouselItems] = useState<any[]>(preloadedCarousel || []);
 
   useEffect(() => {
     const fetchCategories = async () => {
+      if (preloadedCategories) return;
       try {
         const res = await api.get("/categories");
         setCategories(res);
@@ -74,6 +81,7 @@ export default function Header() {
     };
 
     const fetchCarouselItems = async () => {
+      if (preloadedCarousel) return;
       try {
         const res = await api.get("/carousel");
         setCarouselItems(res);
@@ -84,7 +92,7 @@ export default function Header() {
 
     fetchCategories();
     fetchCarouselItems();
-  }, [user]);
+  }, [user, preloadedCategories, preloadedCarousel]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

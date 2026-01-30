@@ -136,7 +136,7 @@ export default function Header() {
           </div>
         </div>
 
-<div className="relative h-30 sm:h-35 w-full overflow-hidden">
+<div className="relative h-30 sm:h-35 w-full overflow-hidden bg-green-900">
   {/* Background Image */}
   <Image
     src="/header.jpg"

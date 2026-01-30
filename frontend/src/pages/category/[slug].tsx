@@ -24,6 +24,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
 import BannerHeader from "@/components/shared/BannerHeader";
+import { useRouter } from "next/router";
 import { useSearchParams } from "next/navigation";
 import Script from "next/dist/client/script";
 import GoogleAd from "@/components/shared/GoogleAds";
@@ -42,14 +43,18 @@ interface CategoryPageProps {
   posts: Post[];
   yojnaPosts: YojnaPost[];
   totalPosts: number;
+  currentPage: number;
+  totalPages: number;
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { slug } = context.params!;
+  const page = Number(context.query.page) || 1;
+  const limit = 20;
 
   try {
     const [data, yojnaData] = await Promise.all([
-      api.get(`/categories/slug/${slug}/posts`),
+      api.get(`/categories/slug/${slug}/posts?page=${page}&limit=${limit}`),
       api.get('/categories/slug/yojna/posts?limit=12'),
     ]);
 
@@ -58,9 +63,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return {
       props: JSON.parse(JSON.stringify({
         category: data.category,
-        posts: data.posts,
+        posts: data.posts || [],
         yojnaPosts,
-        totalPosts: data.totalPosts
+        totalPosts: data.meta?.total || 0,
+        currentPage: data.meta?.page || 1,
+        totalPages: data.meta?.totalPages || 1,
       }))
     };
   } catch (error) {
@@ -69,13 +76,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 };
 
-const CategoryPage: NextPage<CategoryPageProps> = ({ category, posts, yojnaPosts, totalPosts }) => {
-  console.log('Category:', category);
-  console.log('Posts:', posts);
-// set state query from url into selectedTag
+const CategoryPage: NextPage<CategoryPageProps> = ({ category, posts, yojnaPosts, totalPosts, currentPage, totalPages }) => {
+  // set state query from url into selectedTag
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOrder, setSortOrder] = useState("newest");
   const params = useSearchParams();
+  const router = useRouter();
   const [selectedTag, setSelectedTag] = useState("all");
   
   const getLogoText = (categoryName?: string) => {
@@ -89,6 +95,14 @@ const CategoryPage: NextPage<CategoryPageProps> = ({ category, posts, yojnaPosts
       setSelectedTag(tagFromUrl);
     }
   }, [params]);
+
+  const handlePageChange = (newPage: number) => {
+    if (newPage < 1 || newPage > totalPages) return;
+    router.push({
+      pathname: router.pathname,
+      query: { ...router.query, page: newPage },
+    }, undefined, { scroll: true });
+  };
 
   const allTags = useMemo(() => {
     const tagSet = new Set<string>();
@@ -173,8 +187,6 @@ const CategoryPage: NextPage<CategoryPageProps> = ({ category, posts, yojnaPosts
             </BreadcrumbList>
           </Breadcrumb>
           
-          {/* <hr className="mb-4"/> */}
-
           <div className="grid grid-cols-2 mb-6">
             <div className="flex items-center">
               <div className="flex gap-4 w-full md:w-auto md:flex-shrink-0">
@@ -251,7 +263,7 @@ const CategoryPage: NextPage<CategoryPageProps> = ({ category, posts, yojnaPosts
               <Card>
                 <CardContent className="py-12 text-center">
                   <p className="text-gray-500 text-lg">
-                    No posts found in this ®category yet.
+                    No posts found in this category yet.
                   </p>
                 </CardContent>
               </Card>
@@ -268,8 +280,7 @@ const CategoryPage: NextPage<CategoryPageProps> = ({ category, posts, yojnaPosts
             ) : (
               <div className="space-y-4">
                 {processedPosts.map((post, index) => {
-                  return (
-                    <>
+                   return (
                     <Link href={`/posts/${post.slug}`} key={post.id} className="block bg-white group transition-all duration-200 rounded-lg shadow-xl border-gray-200 overflow-hidden relative">
                       <div className="flex flex-row justify-between items-end md:items-center gap-4 px-4 py-2 w-full h-full">
                         <div className="flex-grow">
@@ -314,8 +325,7 @@ const CategoryPage: NextPage<CategoryPageProps> = ({ category, posts, yojnaPosts
                                 })}
                               </p>
                             )}
-                            {/* <div className="flex items-center gap-1.5"><FileText size={14} /> {post.total_marks} Marks</div> */}
-                          </div>
+                           </div>
                         </div>
                         <div className="hidden sm:block w-auto flex-shrink-0">
                           <div
@@ -325,7 +335,7 @@ const CategoryPage: NextPage<CategoryPageProps> = ({ category, posts, yojnaPosts
                             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                           </div>
                         </div>
-                        <div className="inline sm:hidden mb-4">
+                         <div className="inline sm:hidden mb-4">
                           <div
                             className='bg-gradient-to-r from-green-600 to-gray-800 text-white font-semibold text-center flex items-center justify-center min-w-7 min-h-7 w-7 h-7 p-1 rounded'
                           >
@@ -335,15 +345,54 @@ const CategoryPage: NextPage<CategoryPageProps> = ({ category, posts, yojnaPosts
                         </div>
                       </div>
                     </Link>
-                    </>
                   );
                 })}
               </div>
             )}
+            
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+            <div className="flex justify-center items-center space-x-2 mt-8">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage <= 1}
+              >
+                Previous
+              </Button>
+              <div className="flex items-center space-x-1">
+                {Array.from({ length: totalPages }, (_, i) => i + 1)
+                  .filter(p => p === 1 || p === totalPages || (p >= currentPage - 1 && p <= currentPage + 1))
+                  .map((p, index, array) => (
+                    <>
+                      {index > 0 && array[index - 1] !== p - 1 && <span className="px-2">...</span>}
+                      <Button
+                        key={p}
+                        variant={p === currentPage ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => handlePageChange(p)}
+                        className={p === currentPage ? "bg-black text-white hover:bg-black/90" : ""}
+                      >
+                        {p}
+                      </Button>
+                    </>
+                  ))}
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage >= totalPages}
+              >
+                Next
+              </Button>
+            </div>
+            )}
+
           </div>
         </div>
         <div className="lg:col-span-1">
-          {/* <AdBanner text="Google Ads Section" className="h-88" /> */}
           <div className="mt-12 ml-12">
             <Sidebar yojnaPosts={yojnaPosts} />
           </div>

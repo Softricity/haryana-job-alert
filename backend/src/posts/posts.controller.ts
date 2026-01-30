@@ -23,7 +23,7 @@ export class PostsController {
   constructor(
     private readonly postsService: PostsService,
     private readonly supabaseService: SupabaseService, // Inject SupabaseService
-  ) {}
+  ) { }
 
   @Post()
   @UseInterceptors(FileInterceptor('file')) // Handle a single file upload with the key 'file'
@@ -37,9 +37,9 @@ export class PostsController {
       const publicUrl = await this.supabaseService.uploadFile(file, bucket, path);
       createPostDto.thumbnail_url = publicUrl; // Add the URL to the DTO
     }
-    
+
     // TODO: Replace with actual userId from authentication context
-    const validUserId = 1; 
+    const validUserId = 1;
     return this.postsService.create(createPostDto, validUserId);
   }
 
@@ -100,8 +100,14 @@ export class PostsController {
 
   // Find posts by tag name (case-insensitive)
   @Get('tag/:name')
-  findByTagName(@Param('name') name: string) {
-    return this.postsService.findByTagName(name);
+  findByTagName(
+    @Param('name') name: string,
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+  ) {
+    const pageNumber = Number.isFinite(Number(page)) ? Number(page) : 1;
+    const limitNumber = Number.isFinite(Number(limit)) ? Number(limit) : 20;
+    return this.postsService.findByTagName(name, pageNumber, limitNumber);
   }
 
   // Generic :id route MUST come AFTER all specific routes
@@ -117,7 +123,7 @@ export class PostsController {
     @UploadedFile() file: Express.Multer.File,
     @Body() updatePostDto: UpdatePostDto,
   ) {
-   if (file) {
+    if (file) {
       const bucket = 'thumbnails';
       const path = 'posts'; // Or another path for updates if desired
       const publicUrl = await this.supabaseService.uploadFile(file, bucket, path);

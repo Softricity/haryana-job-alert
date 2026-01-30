@@ -26,6 +26,8 @@ import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLab
 import BannerHeader from "@/components/shared/BannerHeader";
 import { useSearchParams } from "next/navigation";
 
+import { useRouter } from "next/router";
+
 interface Category {
   id: number;
   name: string;
@@ -41,17 +43,21 @@ interface CategoryPageProps {
   categories: Category[];
   yojnaPosts: YojnaPost[];
   totalPosts: number;
+  currentPage: number;
+  totalPages: number;
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { slug } = context.params!;
+  const page = Number(context.query.page) || 1;
+  const limit = 20;
 
   try {
     // Convert slug to tag name (e.g., 'haryana-police' -> 'haryana police')
     const tagName = decodeURIComponent(String(slug)).replace(/-/g, ' ');
-    const [categories, posts, yojnaData] = await Promise.all([
+    const [categories, postsData, yojnaData] = await Promise.all([
       api.get('/categories'),
-      api.get(`/posts/tag/${encodeURIComponent(tagName)}`),
+      api.get(`/posts/tag/${encodeURIComponent(tagName)}?page=${page}&limit=${limit}`),
       api.get('/categories/slug/yojna/posts?limit=12'),
     ]);
 
@@ -70,9 +76,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     return {
       props: JSON.parse(JSON.stringify({
         category,
-        posts,
+        posts: postsData.data || [],
         categories,
         yojnaPosts,
+        totalPosts: postsData.meta?.total || 0,
+        currentPage: postsData.meta?.page || 1,
+        totalPages: postsData.meta?.totalPages || 1,
       }))
     };
   } catch (error) {
@@ -81,13 +90,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 };
 
-const CategoryPage: NextPage<CategoryPageProps> = ({ category, posts, categories, yojnaPosts }) => {
-  console.log('Category:', categories);
-  console.log('Posts:', posts);
-// set state query from url into selectedTag
+const CategoryPage: NextPage<CategoryPageProps> = ({ category, posts, categories, yojnaPosts, currentPage, totalPages }) => {
+  // set state query from url into selectedTag
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOrder, setSortOrder] = useState("newest");
   const params = useSearchParams();
+  const router = useRouter();
   const [selectedTag, setSelectedTag] = useState("all");
   const [selectedCategory, setSelectedCategory] = useState("all"); // Filter by Latest Jobs initially
   
@@ -102,6 +110,14 @@ const CategoryPage: NextPage<CategoryPageProps> = ({ category, posts, categories
       setSelectedTag(tagFromUrl);
     }
   }, [params]);
+
+  const handlePageChange = (newPage: number) => {
+    if (newPage < 1 || newPage > totalPages) return;
+    router.push({
+      pathname: router.pathname,
+      query: { ...router.query, page: newPage },
+    }, undefined, { scroll: true });
+  };
 
   const allTags = useMemo(() => {
     const tagSet = new Set<string>();
@@ -459,6 +475,47 @@ const CategoryPage: NextPage<CategoryPageProps> = ({ category, posts, categories
                 })}
               </div>
             )}
+            
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+            <div className="flex justify-center items-center space-x-2 mt-8">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage <= 1}
+              >
+                Previous
+              </Button>
+              <div className="flex items-center space-x-1">
+                {Array.from({ length: totalPages }, (_, i) => i + 1)
+                  .filter(p => p === 1 || p === totalPages || (p >= currentPage - 1 && p <= currentPage + 1))
+                  .map((p, index, array) => (
+                    <>
+                      {index > 0 && array[index - 1] !== p - 1 && <span className="px-2">...</span>}
+                      <Button
+                        key={p}
+                        variant={p === currentPage ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => handlePageChange(p)}
+                        className={p === currentPage ? "bg-black text-white hover:bg-black/90" : ""}
+                      >
+                        {p}
+                      </Button>
+                    </>
+                  ))}
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage >= totalPages}
+              >
+                Next
+              </Button>
+            </div>
+            )}
+
           </div>
         </div>
         <div className="lg:col-span-1">

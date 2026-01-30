@@ -15,7 +15,7 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 
 @Controller('categories')
 export class CategoriesController {
-  constructor(private readonly categoriesService: CategoriesService) {}
+  constructor(private readonly categoriesService: CategoriesService) { }
 
   @Post()
   create(@Body() createCategoryDto: CreateCategoryDto) {
@@ -45,10 +45,12 @@ export class CategoriesController {
   @Get('slug/:slug/posts')
   findBySlugWithPosts(
     @Param('slug') slug: string,
+    @Query('page') page?: string,
     @Query('limit') limit?: string,
   ) {
-    const take = limit ? parseInt(limit, 10) : undefined;
-    return this.categoriesService.findBySlugWithPosts(slug, take);
+    const pageNumber = Number.isFinite(Number(page)) ? Number(page) : 1;
+    const limitNumber = Number.isFinite(Number(limit)) ? Number(limit) : 20;
+    return this.categoriesService.findBySlugWithPosts(slug, pageNumber, limitNumber);
   }
 
   // Generic :id route comes AFTER specific routes

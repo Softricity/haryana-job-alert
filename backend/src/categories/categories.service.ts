@@ -5,7 +5,7 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 
 @Injectable()
 export class CategoriesService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   create(createCategoryDto: CreateCategoryDto) {
     return this.prisma.categories.create({ data: createCategoryDto });
@@ -65,32 +65,49 @@ export class CategoriesService {
   }
 
   // NEW: Get category with its posts
-  async findBySlugWithPosts(slug: string, limit?: number) {
+  async findBySlugWithPosts(slug: string, page: number = 1, limit: number = 20) {
     const category = await this.findBySlug(slug);
-    
-    const posts = await this.prisma.posts.findMany({
-      where: { category_id: category.id },
-      select: {
-        id: true,
-        title: true,
-        slug: true,
-        category_id: true,
-        created_at: true,
-        thumbnail_url: true,
-        categories: {
-          select: {
-            name: true,
+    const skip = (page - 1) * limit;
+
+    const [posts, total] = await this.prisma.$transaction([
+      this.prisma.posts.findMany({
+        where: { category_id: category.id },
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          category_id: true,
+          created_at: true,
+          thumbnail_url: true,
+          categories: {
+            select: {
+              name: true,
+            },
+          },
+          post_tags: {
+            select: {
+              tags: {
+                select: { name: true, id: true },
+              },
+            },
           },
         },
-      },
-      orderBy: { created_at: 'desc' },
-      take: limit,
-    });
+        orderBy: { created_at: 'desc' },
+        skip,
+        take: limit,
+      }),
+      this.prisma.posts.count({ where: { category_id: category.id } }),
+    ]);
 
     return {
       category,
       posts,
-      totalPosts: posts.length
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
     };
   }
 

@@ -189,39 +189,58 @@ export class PostsService {
     });
   }
 
-  async findByTagName(tagName: string) {
-    return this.prisma.posts.findMany({
-      where: {
-        post_tags: {
-          some: {
-            tags: {
-              name: { equals: tagName, mode: 'insensitive' },
-            },
+  async findByTagName(tagName: string, page: number = 1, limit: number = 20) {
+    const skip = (page - 1) * limit;
+
+    const whereClause = {
+      post_tags: {
+        some: {
+          tags: {
+            name: { equals: tagName, mode: 'insensitive' as const },
           },
         },
       },
-      select: {
-        id: true,
-        title: true,
-        slug: true,
-        created_at: true,
-        published_at: true,
-        thumbnail_url: true,
-        category_id: true,
-        description: true,
-        categories: {
-          select: { name: true },
-        },
-        post_tags: {
-          select: {
-            tags: {
-              select: { name: true, id: true },
+    };
+
+    const [posts, total] = await this.prisma.$transaction([
+      this.prisma.posts.findMany({
+        where: whereClause,
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          created_at: true,
+          published_at: true,
+          thumbnail_url: true,
+          category_id: true,
+          description: true,
+          categories: {
+            select: { name: true },
+          },
+          post_tags: {
+            select: {
+              tags: {
+                select: { name: true, id: true },
+              },
             },
           },
         },
+        orderBy: { created_at: 'desc' },
+        skip,
+        take: limit,
+      }),
+      this.prisma.posts.count({ where: whereClause }),
+    ]);
+
+    return {
+      data: posts,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
       },
-      orderBy: { created_at: 'desc' },
-    });
+    };
   }
 
   /**

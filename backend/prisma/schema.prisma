@@ -260,6 +260,8 @@ model posts {
   categories     categories?     @relation(fields: [category_id], references: [id], onUpdate: NoAction, onDelete: SetNull)
   users          users?          @relation(fields: [created_by], references: [id], onUpdate: NoAction, onDelete: SetNull)
   post_templates post_templates? @relation(fields: [template_id], references: [id], onUpdate: NoAction, onDelete: SetNull)
+
+  @@index([category_id, created_at(sort: Desc)])
 }
 
 model tags {

@@ -22,7 +22,7 @@ export class AppService {
         this.postsService.findLatestByCategory('Latest Jobs', 8),
         this.postsService.findSummaryByCategories(
           15,
-          'Latest Jobs,Yojna,Results,Admit Cards,Documents,Answer Keys',
+          'Latest Jobs,Yojna,Results,Admit cards,Documents,Answer Keys',
         ),
         this.categoriesService.findBySlugWithPosts('yojna', 1, 12),
         this.carouselService.findAll(true),

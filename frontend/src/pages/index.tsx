@@ -2,30 +2,21 @@ import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import { api } from "@/lib/api";
 import { Post } from "@/pages/admin/posts"; 
-import { Category } from "@/pages/admin/getting-started/categories"; // Import the Category type
-
+import { Category } from "@/pages/admin/getting-started/categories";
 import Header from '@/components/shared/Header';
 import Sidebar from '@/components/shared/Sidebar';
 import Footer from '@/components/shared/Footer';
 import { YojnaPost } from '@/components/sidebar/HaryanaYojnaSection';
-import ProfileCard from '@/components/home/ProfileCard';
-import AdBanner from '@/components/shared/AdBanner';
 import AboutSection from '@/components/home/AboutSection';
 import TopLinksSection from '@/components/home/TopLinksSection';
 import PostsSection from '@/components/home/PostsSection';
 import MidCards from '@/components/home/MidCards';
-import MockTestSection from '@/components/home/MockTestSection';
-import CurrentAffairsSection from '@/components/home/CurrentAffairsSection';
-import CourseSection from '@/components/home/CourseSection';
+// import MockTestSection from '@/components/home/MockTestSection';
+// import CourseSection from '@/components/home/CourseSection';
 import FaqSection from '@/components/home/FaqSection';
 import { MockSeries } from "./mock-tests";
-import FloatingSocials from "@/components/shared/FloatingSocials";
-import FancyContainer from "@/components/about/FancyContainer";
-import BannerHeader from "@/components/shared/BannerHeader";
-import { useEffect, useState } from "react";
 import type { Course } from "@/components/admin/courses/CreateCourseForm";
 import type { CourseCategory } from "@/pages/admin/course-categories";
-import GoogleAd from "@/components/shared/GoogleAds";
 
 interface PublicCourse extends Omit<Course, 'tags' | 'authors'> {
     slug: string;

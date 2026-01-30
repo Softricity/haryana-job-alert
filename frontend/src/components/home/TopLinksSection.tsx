@@ -17,12 +17,23 @@ export default function TopLinksSection({ categories }: TopLinksSectionProps) {
     <section className="bg-white pb-2 px-2 sm:px-6 lg:px-8 mt-0">
       <div className="max-w-5xl mx-auto text-center">
         <div className="flex items-center justify-center gap-4 mb-6 mt-0 sm:-mt-6 px-6 sm:px-0 -space-x-6 sm:space-x-0">
-
-        <img src="/leftarrow.png" alt="" className='inline w-17 h-12 object-cover mt-10 sm:rotate-0 rotate-[-30deg]' />
-        <h1 className="text-2xl font-bold text-gray-800 tracking-tight">
-          Haryana <span className="text-red-500">Job</span> Alert is a <span className="text-red-500">FREE</span> Website to get
-        </h1>
-        <img src="/rightarrow.png" alt="" className='inline w-17 h-12 object-cover mt-10 sm:rotate-0 rotate-[30deg]' />
+          <Image 
+            src="/leftarrow.png" 
+            alt="Left Arrow" 
+            width={68} 
+            height={48} 
+            className='inline w-17 h-12 object-cover mt-10 sm:rotate-0 rotate-[-30deg]' 
+          />
+          <h1 className="text-2xl font-bold text-gray-800 tracking-tight">
+            Haryana <span className="text-red-500">Job</span> Alert is a <span className="text-red-500">FREE</span> Website to get
+          </h1>
+          <Image 
+            src="/rightarrow.png" 
+            alt="Right Arrow" 
+            width={68} 
+            height={48} 
+            className='inline w-17 h-12 object-cover mt-10 sm:rotate-0 rotate-[30deg]' 
+          />
         </div>
 
         <div className="flex flex-wrap gap-x-3 gap-y-2 justify-center">

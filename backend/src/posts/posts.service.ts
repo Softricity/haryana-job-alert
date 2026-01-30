@@ -308,15 +308,17 @@ export class PostsService {
    * Useful for homepage cards where full HTML content is not needed.
    */
   async findSummaryByCategories(limit = 25) {
-    const categories = await this.prisma.categories.findMany({ orderBy: { name: 'asc' } });
-
-    // Use Promise.all to fetch posts for all categories in parallel
-    const result = await Promise.all(
-      categories.map(async (cat) => {
-        const posts = await this.prisma.posts.findMany({
-          where: { category_id: cat.id },
-          orderBy: { created_at: 'desc' },
+    // Optimized: Fetch categories and their latest posts in a single query
+    // distinct queries vs single query: Prisma handles 'take' inside relations efficiently
+    return this.prisma.categories.findMany({
+      orderBy: { name: 'asc' },
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        posts: {
           take: limit,
+          orderBy: { created_at: 'desc' },
           select: {
             id: true,
             title: true,
@@ -324,18 +326,9 @@ export class PostsService {
             category_id: true,
             created_at: true,
           },
-        });
-
-        return {
-          id: Number(cat.id),
-          name: cat.name,
-          description: cat.description,
-          posts,
-        };
-      })
-    );
-
-    return result;
+        },
+      },
+    });
   }
 
   async remove(id: number) {

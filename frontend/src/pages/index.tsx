@@ -54,24 +54,30 @@ interface HomePageProps {
   carouselItems: any[];
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  try {
-    const [categories, posts, categoriesWithPosts, yojnaData, carouselItems] = await Promise.all([
+export const getStaticProps = async () => {
+  const [categories, posts, categoriesWithPosts, yojnaData, carouselItems] =
+    await Promise.all([
       api.get('/categories'),
-      api.get(`/posts/latest?category=${encodeURIComponent('Latest Jobs')}&limit=8`),
+      api.get(`/posts/latest?category=Latest Jobs&limit=8`),
       api.get('/posts/summary?limit=25'),
       api.get('/categories/slug/yojna/posts?limit=12'),
       api.get('/carousel'),
     ]);
 
-    const yojnaPosts = yojnaData?.posts || [];
-
-    return { props: { categories, posts, categoriesWithPosts, yojnaPosts, series: [], courses: [], carouselItems: carouselItems || [] } };
-  } catch (error) {
-    console.error("Failed to fetch data for homepage:", error);
-    return { props: { categories: [], posts: [], categoriesWithPosts: [], yojnaPosts: [], series: [], courses: [], carouselItems: [] } };
-  }
+  return {
+    props: {
+      categories,
+      posts,
+      categoriesWithPosts,
+      yojnaPosts: yojnaData?.posts || [],
+      series: [],
+      courses: [],
+      carouselItems: carouselItems || [],
+    },
+    revalidate: 300, // 5 minutes
+  };
 };
+
 
 const HomePage: NextPage<HomePageProps> = ({ categories, posts, categoriesWithPosts, yojnaPosts, series, courses, carouselItems }) => {
   return (

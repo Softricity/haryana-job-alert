@@ -5,7 +5,7 @@ import { UpdateCarouselDto } from './dto/update-carousel.dto';
 
 @Injectable()
 export class CarouselService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async create(createCarouselDto: CreateCarouselDto) {
     return this.prisma.carousel_texts.create({ data: createCarouselDto });
@@ -15,6 +15,12 @@ export class CarouselService {
     return this.prisma.carousel_texts.findMany({
       where: onlyActive ? { is_active: true } : {},
       orderBy: { created_at: 'desc' },
+      select: {
+        id: true,
+        text: true,
+        // Add link if it exists in your schema, otherwise remove
+        // link: true, 
+      }
     });
   }
 
@@ -28,7 +34,7 @@ export class CarouselService {
 
   async update(id: number, updateCarouselDto: UpdateCarouselDto) {
     await this.findOne(id);
-    
+
     return this.prisma.carousel_texts.update({
       where: { id },
       data: updateCarouselDto,

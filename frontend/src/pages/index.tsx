@@ -69,8 +69,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
       api.get(`/posts/latest?category=${encodeURIComponent('Latest Jobs')}&limit=8`),
       api.get('/posts/summary?limit=25'),
       api.get('/categories/slug/yojna/posts?limit=12'),
-      // api.get('/mock-series'),
-      // api.get('/courses'),
     ]);
 
     const yojnaPosts = yojnaData?.posts || [];

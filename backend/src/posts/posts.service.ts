@@ -310,24 +310,30 @@ export class PostsService {
   async findSummaryByCategories(limit = 25) {
     const categories = await this.prisma.categories.findMany({ orderBy: { name: 'asc' } });
 
-    const result: Array<{ id: number; name: string; description: string | null; posts: Array<any> }> = [];
+    // Use Promise.all to fetch posts for all categories in parallel
+    const result = await Promise.all(
+      categories.map(async (cat) => {
+        const posts = await this.prisma.posts.findMany({
+          where: { category_id: cat.id },
+          orderBy: { created_at: 'desc' },
+          take: limit,
+          select: {
+            id: true,
+            title: true,
+            slug: true,
+            category_id: true,
+            created_at: true,
+          },
+        });
 
-    for (const cat of categories) {
-      const posts = await this.prisma.posts.findMany({
-        where: { category_id: cat.id },
-        orderBy: { created_at: 'desc' },
-        take: limit,
-        select: {
-          id: true,
-          title: true,
-          slug: true,
-          category_id: true,
-          created_at: true,
-        },
-      });
-
-      result.push({ id: Number(cat.id), name: cat.name, description: cat.description, posts });
-    }
+        return {
+          id: Number(cat.id),
+          name: cat.name,
+          description: cat.description,
+          posts,
+        };
+      })
+    );
 
     return result;
   }

@@ -23,6 +23,7 @@ export default function TopLinksSection({ categories }: TopLinksSectionProps) {
             width={68} 
             height={48} 
             className='inline w-17 h-12 object-cover mt-10 sm:rotate-0 rotate-[-30deg]' 
+            unoptimized
           />
           <h1 className="text-2xl font-bold text-gray-800 tracking-tight">
             Haryana <span className="text-red-500">Job</span> Alert is a <span className="text-red-500">FREE</span> Website to get
@@ -33,6 +34,7 @@ export default function TopLinksSection({ categories }: TopLinksSectionProps) {
             width={68} 
             height={48} 
             className='inline w-17 h-12 object-cover mt-10 sm:rotate-0 rotate-[30deg]' 
+            unoptimized
           />
         </div>
 
@@ -71,16 +73,16 @@ export default function TopLinksSection({ categories }: TopLinksSectionProps) {
               <button className="shine group w-full sm:w-auto bg-gradient-to-r from-[#222627] to-[#414245] rounded-xl shadow-md px-1 py-1 flex items-center justify-between font-semibold text-white hover:shadow-lg cursor-pointer hover:scale-105 group duration-300 transition-transform hover:bg-gradient-to-b hover:from-[#1c1e47] hover:via-[#2b2d6c] hover:to-[#34387e]" onClick={() => window.location.href= user.role === 'admin' ? '/admin' : '/dashboard'}>
               <span className='sm:text-sm text-sm pl-3 text-nowrap'>Dashboard</span>
               <span className="ml-4 w-10 h-10 rounded-lg bg-green-400 group-hover:bg-white object-cover flex items-center justify-center">
-              <Image src="/arrow.png" width={48} height={48} alt='arrow' className='rounded-lg group-hover:hidden block' />
-              <Image src="/white-arrow.jpg" width={48} height={48} alt='arrow' className='rounded-lg group-hover:block hidden' />
+              <Image src="/arrow.png" width={48} height={48} alt='arrow' className='rounded-lg group-hover:hidden block' unoptimized />
+              <Image src="/white-arrow.jpg" width={48} height={48} alt='arrow' className='rounded-lg group-hover:block hidden' unoptimized />
               </span>
               </button>
              : 
               <button className="shine group w-full sm:w-auto bg-gradient-to-r from-[#222627] to-[#414245] rounded-xl shadow-md px-1 py-1 flex items-center justify-between font-semibold text-white hover:shadow-lg cursor-pointer hover:scale-105 group duration-300 transition-transform hover:bg-gradient-to-b hover:from-[#1c1e47] hover:via-[#2b2d6c] hover:to-[#34387e]" onClick={() => setShowSignupForm(true)}>
               <span className='sm:text-sm text-sm pl-3 text-nowrap'>Login / Register</span>
               <span className="ml-4 w-10 h-10 rounded-lg bg-green-400 group-hover:bg-white object-cover flex items-center justify-center">
-              <Image src="/arrow.png" width={48} height={48} alt='arrow' className='rounded-lg group-hover:hidden block' />
-              <Image src="/white-arrow.jpg" width={48} height={48} alt='arrow' className='rounded-lg group-hover:block hidden' />
+              <Image src="/arrow.png" width={48} height={48} alt='arrow' className='rounded-lg group-hover:hidden block' unoptimized />
+              <Image src="/white-arrow.jpg" width={48} height={48} alt='arrow' className='rounded-lg group-hover:block hidden' unoptimized />
               </span>
               </button>
             

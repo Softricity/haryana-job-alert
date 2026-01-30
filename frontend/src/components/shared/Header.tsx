@@ -194,6 +194,7 @@ export default function Header({
       width={160}
       height={24}
       className="h-4 sm:h-auto w-30 sm:w-40 object-cover -mt-2 sm:-mt-3 -mr-10 sm:mr-0 lg:block hidden"
+      unoptimized
     />
 
     <span className="sm:hidden relative inline-flex -top-15 -right-20 items-center justify-center px-2.5 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full ml-2">
@@ -327,10 +328,13 @@ export default function Header({
                         className="flex items-center gap-2 text-gray-700 hover:bg-gray-100 p-2 rounded-md"
                         aria-label="Login"
                       >
-                        <img
+                        <Image
                           src="/profile.png"
+                          width={20}
+                          height={20}
                           className="min-h-5 min-w-5 w-5"
                           alt="Login"
+                          unoptimized
                         />
                       </button>
                     )}
@@ -426,10 +430,13 @@ export default function Header({
                     className="flex items-center gap-2 text-gray-700 hover:bg-gray-100 p-2 rounded-md"
                     aria-label="Login"
                   >
-                    <img
+                    <Image
                       src="/profile.png"
+                      width={20}
+                      height={20}
                       className="min-h-5 min-w-5 w-5 h-5"
                       alt="Login"
+                      unoptimized
                     />
                   </button>
                 )}

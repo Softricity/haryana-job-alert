@@ -69,7 +69,7 @@ const MidCard = ({ title, description, posts, index, categorySlug }: MidCardProp
                     <li key={post.id}>
                         <Link href={`/posts/${post.slug}`} legacyBehavior>
                             <a className="flex items-start gap-2 text-gray-700 hover:text-indigo-600 group text-xs md:text-sm">
-                                <Image src="/tick.jpg" alt="tick" width={16} height={16} className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                                <Image src="/tick.jpg" alt="tick" width={16} height={16} className="w-4 h-4 flex-shrink-0 mt-0.5" unoptimized />
                                 <span className="flex-grow text-blue-500 hover:underline">{post.title} <ArrowUpRight className='w-4 h-4 inline' /></span>
                             </a>
                         </Link>

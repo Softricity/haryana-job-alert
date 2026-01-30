@@ -23,7 +23,6 @@ export default function TopLinksSection({ categories }: TopLinksSectionProps) {
             width={68} 
             height={48} 
             className='inline w-17 h-12 object-cover mt-10 sm:rotate-0 rotate-[-30deg]' 
-            unoptimized
           />
           <h1 className="text-2xl font-bold text-gray-800 tracking-tight">
             Haryana <span className="text-red-500">Job</span> Alert is a <span className="text-red-500">FREE</span> Website to get
@@ -34,7 +33,6 @@ export default function TopLinksSection({ categories }: TopLinksSectionProps) {
             width={68} 
             height={48} 
             className='inline w-17 h-12 object-cover mt-10 sm:rotate-0 rotate-[30deg]' 
-            unoptimized
           />
         </div>
 

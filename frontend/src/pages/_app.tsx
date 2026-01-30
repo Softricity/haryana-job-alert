@@ -8,13 +8,20 @@ import { ReactNode, useEffect, useState } from "react"; // Import useEffect
 import { HashLoader } from "react-spinners"; // Loading spinner
 import Router from "next/router";
 import { HeroUIProvider } from "@heroui/react";
-import { Poppins } from "next/font/google";
+import { Poppins, Playfair_Display } from "next/font/google";
 import Script from "next/script";
 import { ThirdPartyScripts } from "@/components/ThirdPartyScripts";
 
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+  variable: "--font-poppins",
+  display: "swap",
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-playfair",
   display: "swap",
 });
 
@@ -99,7 +106,7 @@ export default function App({ Component, pageProps }: AppProps) {
           </AdminAuthGuard>
         </HeroUIProvider>
       ) : (
-        <main className={poppins.className}>
+        <main className={`${poppins.variable} ${playfair.variable} font-sans`}>
           <Component {...pageProps} />
         </main>
       )}

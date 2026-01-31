@@ -3,6 +3,7 @@ import AdBanner from '../shared/AdBanner';
 import Link from 'next/link';
 import Image from 'next/image';
 import Script from 'next/script';
+import tick from '@/assets/tick.jpg';
 
 // Simplified post type for summary data
 interface PostSummary {
@@ -67,9 +68,9 @@ const MidCard = ({ title, description, posts, index, categorySlug }: MidCardProp
             <ul className="space-y-4">
                 {displayedPosts.map(post => (
                     <li key={post.id}>
-                        <Link href={`/posts/${post.slug}`} legacyBehavior>
+                        <Link href={`/posts/${post.slug}`} legacyBehavior prefetch={false}>
                             <a className="flex items-start gap-2 text-gray-700 hover:text-indigo-600 group text-xs md:text-sm">
-                                <Image src="/tick.jpg" alt="tick" width={16} height={16} className="w-4 h-4 flex-shrink-0 mt-0.5" unoptimized />
+                                <Image src={tick} alt="tick" width={16} height={16} className="w-4 h-4 flex-shrink-0 mt-0.5" placeholder="blur" />
                                 <span className="flex-grow text-blue-500 hover:underline">{post.title} <ArrowUpRight className='w-4 h-4 inline' /></span>
                             </a>
                         </Link>
@@ -83,7 +84,7 @@ const MidCard = ({ title, description, posts, index, categorySlug }: MidCardProp
 
             {hasMorePosts && (
                 <div className="mt-6 text-center">
-                    <Link href={`/category/${categorySlug}`} legacyBehavior>
+                    <Link href={`/category/${categorySlug}`} legacyBehavior prefetch={false}>
                         <a className="inline-flex text-xs items-center gap-2 px-5 py-2 bg-black text-white font-semibold rounded-lg shadow-md hover:shadow-lg">
                             View More
                             <ArrowRight className="w-4 h-4" />

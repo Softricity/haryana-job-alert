@@ -35,6 +35,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { api } from "@/lib/api";
 import { AuthDialog } from "@/components/auth/AuthDialog";
 import { SearchDialog } from "./SearchDialog";
+import headerBg from "@/assets/header.jpg"; // Import the image
 
 const navLinks = [
   { name: "Home", href: "/" },
@@ -147,15 +148,16 @@ export default function Header({
 <div className="relative h-30 sm:h-35 w-full overflow-hidden bg-green-900">
   {/* Background Image */}
   <Image
-    src="/header.jpg"
+    src={headerBg}
     alt="Header background"
     fill
     priority
+    placeholder="blur" // Add blur placeholder
     quality={50}
     sizes="100vw"
     className="object-cover object-center"
   />
-
+  
   {/* Optional overlay (if needed) */}
   {/* <div className="absolute inset-0 bg-black/20" /> */}
 

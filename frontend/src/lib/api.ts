@@ -14,18 +14,23 @@ const getHeaders = (token?: string) => {
 };
 
 export const api = {
-  get: async (endpoint: string, token?: string) => {
+  get: async (endpoint: string, token?: string, options: RequestInit = {}) => {
+    const { cache, next, ...rest } = options;
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       headers: getHeaders(token),
-      cache: 'no-store',
+      cache: cache || 'no-store', // Default to no-store if not provided to maintain backward compatibility for now, strictly, or we can default to default fetch behavior. 
+      // However, to support ISR, we usually want to allow the caller to specify. 
+      // The user wants to fix the issue. If I leave 'no-store' as default, I must explicitly pass cache options in getStaticProps.
+      next,
+      ...rest
     });
     if (!response.ok) {
       let errorData;
-        try {
-            errorData = await response.json();
-        } catch (e) {
-             errorData = { message: `HTTP error! status: ${response.status}` };
-        }
+      try {
+        errorData = await response.json();
+      } catch (e) {
+        errorData = { message: `HTTP error! status: ${response.status}` };
+      }
       throw new Error(errorData.message || 'Network response was not ok');
     }
     return response.json();
@@ -70,7 +75,7 @@ export const api = {
     // Often PATCH requests return 204 No Content or the updated resource
     // Handle potential empty response body for 204
     if (response.status === 204) {
-        return null; // Or return an empty object/success status
+      return null; // Or return an empty object/success status
     }
     return response.json();
   },
@@ -85,7 +90,7 @@ export const api = {
       throw new Error(errorData.message || 'Something went wrong');
     }
     if (response.status === 204) {
-        return null;
+      return null;
     }
     return response.json();
   },
@@ -97,13 +102,13 @@ export const api = {
       headers['Authorization'] = `Bearer ${token}`;
     }
     // Don't set Content-Type header, let browser set it with boundary for FormData
-    
+
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       method: 'POST',
       headers,
       body: formData,
     });
-    
+
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({ message: 'Failed to upload' }));
       throw new Error(errorData.message || 'Upload failed');
@@ -118,13 +123,13 @@ export const api = {
       headers['Authorization'] = `Bearer ${token}`;
     }
     // Don't set Content-Type header, let browser set it with boundary for FormData
-    
+
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       method: 'PUT',
       headers,
       body: formData,
     });
-    
+
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({ message: 'Failed to update' }));
       throw new Error(errorData.message || 'Update failed');

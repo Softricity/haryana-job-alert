@@ -1,4 +1,4 @@
-import { GetServerSideProps, NextPage } from "next";
+import { GetStaticProps, GetStaticPaths, NextPage } from "next";
 import Head from 'next/head';
 import Link from "next/link";
 import { api } from "@/lib/api";
@@ -31,7 +31,14 @@ interface PostPageProps {
   carouselItems: any[];
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [],
+    fallback: 'blocking',
+  };
+};
+
+export const getStaticProps: GetStaticProps = async (context) => {
   const { slug } = context.params!;
   try {
     const [post, yojnaData, categories, carouselItems] = await Promise.all([
@@ -43,7 +50,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     const yojnaPosts = yojnaData?.posts || [];
 
-    return { props: { post, yojnaPosts, categories: categories || [], carouselItems: carouselItems || [] } };
+    return { 
+      props: { post, yojnaPosts, categories: categories || [], carouselItems: carouselItems || [] },
+      revalidate: 60,
+    };
   } catch (error) {
     console.error(`Failed to fetch post with slug ${slug}:`, error);
     return { notFound: true };

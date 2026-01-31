@@ -1,4 +1,4 @@
-import { GetServerSideProps, NextPage } from "next";
+import { GetStaticProps, NextPage } from "next";
 import Link from "next/link";
 import { api } from "@/lib/api";
 import Header from "@/components/shared/Header";
@@ -47,17 +47,23 @@ interface MockTestsHomePageProps {
   carouselItems: any[];
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   try {
     const [series, categories, carouselItems] = await Promise.all([
       api.get('/mock-series'),
       api.get('/categories'),
       api.get('/carousel'),
     ]);
-    return { props: { series, headerCategories: categories || [], carouselItems: carouselItems || [] } };
+    return { 
+      props: { series, headerCategories: categories || [], carouselItems: carouselItems || [] },
+      revalidate: 60,
+    };
   } catch (error) {
     console.error("Failed to fetch mock series:", error);
-    return { props: { series: [], headerCategories: [], carouselItems: [] } };
+    return { 
+      props: { series: [], headerCategories: [], carouselItems: [] },
+      revalidate: 60,
+    };
   }
 };
 

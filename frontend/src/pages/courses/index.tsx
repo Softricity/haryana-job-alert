@@ -1,4 +1,4 @@
-import { GetServerSideProps, NextPage } from "next";
+import { GetStaticProps, NextPage } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { api } from "@/lib/api";
@@ -35,7 +35,7 @@ interface CoursesHomePageProps {
     carouselItems: any[];
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
     try {
         // Fetch only published courses for the public page
         const [courses, categories, carouselItems] = await Promise.all([
@@ -43,10 +43,16 @@ export const getServerSideProps: GetServerSideProps = async () => {
             api.get('/categories'),
             api.get('/carousel'),
         ]);
-        return { props: { courses, headerCategories: categories || [], carouselItems: carouselItems || [] } };
+        return { 
+            props: { courses, headerCategories: categories || [], carouselItems: carouselItems || [] },
+            revalidate: 60,
+        };
     } catch (error) {
         console.error("Failed to fetch published courses:", error);
-        return { props: { courses: [], headerCategories: [], carouselItems: [] } };
+        return { 
+            props: { courses: [], headerCategories: [], carouselItems: [] },
+            revalidate: 60,
+        };
     }
 };
 

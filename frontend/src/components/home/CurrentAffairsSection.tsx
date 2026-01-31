@@ -178,6 +178,7 @@ export default function CurrentAffairsSection() {
                                         </h3>
                                         <Link
                                             href={getArticleLink(post)}
+                                            prefetch={false}
                                             target={post.external_url ? "_blank" : "_self"}
                                             rel={post.external_url ? "noopener noreferrer" : ""}
                                             className="shine w-full bg-gradient-to-r from-emerald-900 to-[#237856] text-white text-center rounded-lg px-4 py-2.5 font-semibold text-xs md:text-sm inline-flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"

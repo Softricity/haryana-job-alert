@@ -221,6 +221,7 @@ export default function Header({
                     <Link
                       key={link.name}
                       href={link.href}
+                      prefetch={false}
                       className={`px-4 py-2 rounded-xl text-md font-medium transition-colors whitespace-nowrap ${
                         link.href === currentPath
                           ? "bg-black text-white"
@@ -258,6 +259,7 @@ export default function Header({
                                  href={`/category/${category.name
                                    .toLowerCase()
                                    .replace(/\s+/g, "-")}`}
+                                 prefetch={false}
                                  className="px-3 py-2 rounded-lg text-sm font-medium transition-colors text-gray-700 hover:bg-gray-100 whitespace-nowrap"
                                >
                                  {category.name}
@@ -299,6 +301,7 @@ export default function Header({
                             <hr className="my-1 text-gray-300" />
                             <Link
                               href="/dashboard"
+                              prefetch={false}
                               className="flex items-center gap-3 p-2 rounded-md hover:bg-gray-100 text-sm font-medium text-gray-700 whitespace-nowrap"
                             >
                               <House className="w-4 h-4" />
@@ -306,6 +309,7 @@ export default function Header({
                             </Link>
                             <Link
                               href="/dashboard/profile/edit"
+                              prefetch={false}
                               className="flex items-center gap-3 p-2 rounded-md hover:bg-gray-100 text-sm font-medium text-gray-700 whitespace-nowrap"
                             >
                               <User className="w-4 h-4" />
@@ -397,6 +401,7 @@ export default function Header({
                         <DropdownMenuItem asChild>
                           <Link
                             href="/dashboard"
+                            prefetch={false}
                             className="flex items-center gap-3"
                           >
                             <House className="w-4 h-4" />
@@ -406,6 +411,7 @@ export default function Header({
                         <DropdownMenuItem asChild>
                           <Link
                             href="/dashboard/profile/edit"
+                            prefetch={false}
                             className="flex items-center gap-3"
                           >
                             <User className="w-4 h-4" />
@@ -464,6 +470,7 @@ export default function Header({
                 <Link
                   key={link.name}
                   href={link.href}
+                  prefetch={false}
                   className={`block px-3 py-2 rounded-md text-base font-medium whitespace-nowrap ${
                     link.href === currentPath
                       ? "bg-black text-white"
@@ -506,6 +513,7 @@ export default function Header({
                              href={`/category/${category.name
                                .toLowerCase()
                                .replace(/\s+/g, "-")}`}
+                             prefetch={false}
                              className="block px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 whitespace-nowrap"
                              onClick={() => setIsMenuOpen(false)}
                            >

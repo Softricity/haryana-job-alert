@@ -257,7 +257,7 @@ const MockTestSection: NextPage<MockTestsHomePageProps> = ({ series }) => {
 
                   {/* --- View Button --- */}
                   <div className="mt-auto">
-                    <Link href={detailUrl}>
+                    <Link href={detailUrl} prefetch={false}>
                       <button className="shine w-full bg-indigo-600 hover:bg-indigo-700 text-xs text-white text-center rounded-lg px-4 py-3 font-medium inline-flex items-center justify-center gap-2 transition-all group">
                         <span>View test series</span>
                         <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

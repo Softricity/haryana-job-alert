@@ -116,6 +116,7 @@ const CourseSection: React.FC<CoursesHomePageProps> = ({ courses }) => {
                                     {/* --- 2. BUG FIX: Use course.slug for the link --- */}
                                     <Link
                                         href={`/courses/${course.slug}`}
+                                        prefetch={false}
                                         className="shine flex-grow bg-gradient-to-r from-red-600 to-gray-800 text-white text-center rounded-lg px-4 py-3 font-semibold text-xs md:text-sm inline-flex items-center justify-center hover:opacity-90 transition-opacity"
                                     >
                                         View Course
@@ -130,7 +131,7 @@ const CourseSection: React.FC<CoursesHomePageProps> = ({ courses }) => {
                 </div>
 
                 <div className="text-center mt-12">
-                    <Link href="/courses">
+                    <Link href="/courses" prefetch={false}>
                         <Button variant="bordered" className="bg-gray-100 border-2 border-gray-300 rounded-xl px-12 py-3 font-semibold text-gray-800 hover:bg-gray-100 hover:border-gray-400 transition-all shadow-sm">
                             View More
                         </Button>

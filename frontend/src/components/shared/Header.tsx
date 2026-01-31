@@ -36,6 +36,7 @@ import { api } from "@/lib/api";
 import { AuthDialog } from "@/components/auth/AuthDialog";
 import { SearchDialog } from "./SearchDialog";
 import headerBg from "@/assets/header.jpg"; // Import the image
+import logo from "@/assets/logo.jpg";
 
 const navLinks = [
   { name: "Home", href: "/" },
@@ -178,12 +179,13 @@ export default function Header({
   <div className="absolute top-6 sm:top-6 left-[45vw] translate-x-[-50%] sm:left-[48vw] flex flex-col items-end z-20">
     <h1 className="text-3xl sm:text-4xl font-bold text-white flex items-center">
       <Image
-        src="/logo.jpg"
+        src={logo}
         alt="Logo"
         width={52}
         height={52}
         className="mr-2.5"
         priority
+        placeholder="blur"
       />
       <div className="text-nowrap">
         Haryana <span className="text-[#fdf500]">Job Alert</span>

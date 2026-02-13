@@ -17,10 +17,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
-
 import { Button } from "@heroui/button"
-import {  Dropdown,  DropdownTrigger,  DropdownMenu,  DropdownSection,  DropdownItem} from "@heroui/dropdown";
 import { Input } from "@heroui/input"
 import {  Table,  TableHeader,  TableBody,  TableColumn,  TableRow,  TableCell} from "@heroui/table";
 import { Post } from "@/pages/admin/posts"
@@ -88,28 +85,14 @@ export function PostsClient({
       cell: ({ row }) => {
         const post = row.original;
         return (
-          <Dropdown>
-              <DropdownTrigger>
-                <button
-                  type="button"
-                  aria-label="Open menu"
-                  className="h-8 w-8 p-0 inline-flex items-center justify-center rounded-md text-sm hover:bg-muted"
-                >
-                  <span className="sr-only">Open menu</span>
-                  <MoreHorizontal className="h-4 w-4" />
-                </button>
-              </DropdownTrigger>
-            <DropdownMenu>
-              <DropdownSection title="Actions">
-              <DropdownItem key='new' onClick={() => router.push(`/admin/posts/${post.id}/edit`)}>
-                Edit Post
-              </DropdownItem>
-              <DropdownItem key='delete' className="text-red-500" onClick={() => handleDelete(post.id)}>
-                Delete Post
-              </DropdownItem>
-              </DropdownSection>
-            </DropdownMenu>
-          </Dropdown>
+          <div className="flex items-center gap-2">
+            <Button size="sm" variant="ghost" onPress={() => router.push(`/admin/posts/${post.id}/edit`)}>
+              Edit
+            </Button>
+            <Button size="sm" variant="ghost" className="text-red-500" onPress={() => handleDelete(post.id)}>
+              Delete
+            </Button>
+          </div>
         );
       },
     },

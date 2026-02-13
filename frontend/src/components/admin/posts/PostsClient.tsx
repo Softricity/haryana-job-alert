@@ -89,12 +89,16 @@ export function PostsClient({
         const post = row.original;
         return (
           <Dropdown>
-            <DropdownTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownTrigger>
+              <DropdownTrigger>
+                <button
+                  type="button"
+                  aria-label="Open menu"
+                  className="h-8 w-8 p-0 inline-flex items-center justify-center rounded-md text-sm hover:bg-muted"
+                >
+                  <span className="sr-only">Open menu</span>
+                  <MoreHorizontal className="h-4 w-4" />
+                </button>
+              </DropdownTrigger>
             <DropdownMenu>
               <DropdownSection title="Actions">
               <DropdownItem key='new' onClick={() => router.push(`/admin/posts/${post.id}/edit`)}>

@@ -19,11 +19,8 @@ const legalLinks = [
 
 // Social icons based on the image
 const socialLinks = [
-    { name: 'Facebook', icon: Facebook, href: '#' },
-    { name: 'Instagram', icon: Instagram, href: '#' },
-    { name: 'Youtube', icon: Youtube, href: '#' },
-    { name: 'Linkedin', icon: Linkedin, href: '#' },
-    { name: 'Dribbble', icon: Dribbble, href: '#' },
+    { name: 'Instagram', icon: Instagram, href: 'https://www.instagram.com/haryana_jobalertas/' },
+    { name: 'Youtube', icon: Youtube, href: 'https://www.youtube.com/@AToZJob-y7r' },
 ];
 
 

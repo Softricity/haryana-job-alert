@@ -14,7 +14,7 @@ export const ThirdPartyScripts = () => {
     // 1. Load Analytics after 4 seconds (lighter)
     const analyticsTimer = setTimeout(() => {
       setLoadAnalytics(true);
-    }, 4000);
+    }, 1000);
 
     // 2. Load Ads & Heavy Scripts after 7 seconds
     // This prevents the "freeze" that happens when everything loads at 3s

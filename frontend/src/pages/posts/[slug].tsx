@@ -107,20 +107,32 @@ const PostPage: NextPage<PostPageProps> = ({ post, yojnaPosts, categories, carou
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
             <div className="lg:col-span-3">
-              <div className="futureads" style={{ width: "320px", height: "100px", display: "inline-block" }} data-ad-slot="pw_49947"></div> <script type="text/javascript">(wapTag.Init = window.wapTag.Init || []).push(function () { 
-              // @ts-ignore
-              wAPITag.display("pw_49947")
-               })</script>
+              <div className="futureads" style={{ width: "320px", height: "100px", display: "inline-block" }} data-ad-slot="pw_49947"></div> 
+              <Script id="wap-ad-49947" strategy="afterInteractive">
+                {`
+                  (window.wapTag.Init = window.wapTag.Init || []).push(function () { 
+                    if (typeof wAPITag !== 'undefined') {
+                      wAPITag.display("pw_49947");
+                    }
+                  });
+                `}
+              </Script>
                 <article className="text-sm md:text-base h-max-content">
                   <div 
                     className="prose max-w-none overflow-x-auto p-0 rendering-area" 
                     dangerouslySetInnerHTML={{ __html: post.content_html || '' }}
                   />
                 </article>
-                <div className="futureads" style={{ width: "336px", height: "280px", display: "inline-block" }} data-ad-slot="pw_49868"></div> <script type="text/javascript">(wapTag.Init = window.wapTag.Init || []).push(function () { 
-                // @ts-ignore
-                wAPITag.display("pw_49868")
-                 })</script>
+                <div className="futureads" style={{ width: "336px", height: "280px", display: "inline-block" }} data-ad-slot="pw_49868"></div> 
+                <Script id="wap-ad-49868" strategy="afterInteractive">
+                  {`
+                    (window.wapTag.Init = window.wapTag.Init || []).push(function () { 
+                      if (typeof wAPITag !== 'undefined') {
+                        wAPITag.display("pw_49868");
+                      }
+                    });
+                  `}
+                </Script>
             </div>
             <aside>
                 <Sidebar yojnaPosts={yojnaPosts} />

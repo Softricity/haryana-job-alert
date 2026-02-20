@@ -1,3 +1,4 @@
+import Script from "next/script";
 import AdBanner from "./AdBanner";
 import CourseSection from "../sidebar/CourseSection";
 import HaryanaYojnaSection, { YojnaPost } from "../sidebar/HaryanaYojnaSection";
@@ -41,11 +42,17 @@ export default function Sidebar({ className, courses = [], yojnaPosts = [] }: Si
             "w-full hidden lg:flex flex-col gap-6",
             className
         )}>
-          <div className="futureads" style={{ width: "300px", height: "250px", display: "inline-block" }} data-ad-slot="pw_49946"></div> <script type="text/javascript">(wapTag.Init = window.wapTag.Init || []).push(function () { 
-              // @ts-ignore
-              wAPITag.display("pw_49946")
-               })</script>
-            <HaryanaYojnaSection posts={yojnaPosts} />
+          <div className="futureads" style={{ width: "300px", height: "250px", display: "inline-block" }} data-ad-slot="pw_49946"></div> 
+          <Script id="wap-ad-49946" strategy="afterInteractive">
+            {`
+              (window.wapTag.Init = window.wapTag.Init || []).push(function () { 
+                if (typeof wAPITag !== 'undefined') {
+                  wAPITag.display("pw_49946");
+                }
+              });
+            `}
+          </Script>
+          <HaryanaYojnaSection posts={yojnaPosts} />
             {/* <AdBanner text="Google Ad Section" className="h-88" /> */}
             {/* <CourseSection courses={courses} /> */}
             {/* <AdBanner text="Google Ad Section" className="h-64" /> */}

@@ -94,7 +94,6 @@ const HomePage: NextPage<HomePageProps> = ({ categories, posts, categoriesWithPo
       <Head>
         <title>Haryana Job Alert - Latest Govt Jobs, Results, Admit Cards</title>
         <meta name="description" content="Your one-stop destination for the latest government job alerts, exam results, and admit cards in Haryana and across India." />
-        <script type="text/javascript" src="//cdn.ehumps.com/w/3909ce10-1d9c-4703-9202-0bf655efb93f.js" async defer></script><script>var wapTag = wapTag || {};wapTag.gdprShowConsentToolButton = false;</script><script type="text/javascript" src="//cdn.ehumps.com/ata/adv/3909ce10-1d9c-4703-9202-0bf655efb93f.js" async defer></script>
       </Head>
       <Header preloadedCategories={categories} preloadedCarousel={carouselItems} />
       <TopLinksSection categories={categories} />

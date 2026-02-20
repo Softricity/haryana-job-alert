@@ -20,7 +20,7 @@ export const ThirdPartyScripts = () => {
     // This prevents the "freeze" that happens when everything loads at 3s
     const adsTimer = setTimeout(() => {
       setLoadAds(true);
-    }, 2000);
+    }, 1000);
 
     return () => {
       clearTimeout(analyticsTimer);

@@ -107,13 +107,20 @@ const PostPage: NextPage<PostPageProps> = ({ post, yojnaPosts, categories, carou
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
             <div className="lg:col-span-3">
-               <img src="/notes-offer.png" alt="" className="w-full my-3" />
+              <div className="futureads" style={{ width: "320px", height: "100px", display: "inline-block" }} data-ad-slot="pw_49947"></div> <script type="text/javascript">(wapTag.Init = window.wapTag.Init || []).push(function () { 
+              // @ts-ignore
+              wAPITag.display("pw_49947")
+               })</script>
                 <article className="text-sm md:text-base h-max-content">
                   <div 
                     className="prose max-w-none overflow-x-auto p-0 rendering-area" 
                     dangerouslySetInnerHTML={{ __html: post.content_html || '' }}
                   />
                 </article>
+                <div className="futureads" style={{ width: "336px", height: "280px", display: "inline-block" }} data-ad-slot="pw_49868"></div> <script type="text/javascript">(wapTag.Init = window.wapTag.Init || []).push(function () { 
+                // @ts-ignore
+                wAPITag.display("pw_49868")
+                 })</script>
             </div>
             <aside>
                 <Sidebar yojnaPosts={yojnaPosts} />

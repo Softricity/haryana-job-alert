@@ -20,7 +20,7 @@ export default function TopLinksSection({ categories }: TopLinksSectionProps) {
   return (
     <section className="bg-white pb-2 px-2 sm:px-6 lg:px-8 mt-0">
       <div className="max-w-5xl mx-auto text-center">
-        <div className="flex items-center justify-center gap-4 mb-6 mt-0 sm:-mt-6 px-6 sm:px-0 -space-x-6 sm:space-x-0">
+        <div className="flex items-center justify-center gap-4 mb-8 sm:mt-10 px-6 sm:px-0">
           <h1 className="text-2xl font-bold text-gray-800 tracking-tight">
             Haryana <span className="text-red-500">Job</span> Alert is a <span className="text-red-500">FREE</span> Website to get
           </h1>

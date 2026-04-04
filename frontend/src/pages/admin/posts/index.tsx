@@ -70,14 +70,14 @@ const AllPostsPage: NextPage = () => {
       fetchPosts(1, "");
     }, [fetchPosts]);
   
-    const handlePageChange = (newPage: number) => {
-        fetchPosts(newPage, search);
-    };
+    const handlePageChange = useCallback((newPage: number) => {
+      fetchPosts(newPage, search);
+    }, [fetchPosts, search]);
     
-    const handleSearch = (query: string) => {
-        setSearch(query);
-        fetchPosts(1, query);
-    }
+    const handleSearch = useCallback((query: string) => {
+      setSearch(query);
+      fetchPosts(1, query);
+    }, [fetchPosts]);
   
     return (
       <div className="py-4 px-8">

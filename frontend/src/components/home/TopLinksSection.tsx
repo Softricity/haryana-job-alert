@@ -5,8 +5,6 @@ import Image from 'next/image';
 import { AuthDialog } from '../auth/AuthDialog';
 import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import leftArrow from '@/assets/leftarrow.png';
-import rightArrow from '@/assets/rightarrow.png';
 import arrow from '@/assets/arrow.png';
 import whiteArrow from '@/assets/white-arrow.jpg';
 import wp from '@/assets/wp.png';
@@ -22,26 +20,10 @@ export default function TopLinksSection({ categories }: TopLinksSectionProps) {
   return (
     <section className="bg-white pb-2 px-2 sm:px-6 lg:px-8 mt-0">
       <div className="max-w-5xl mx-auto text-center">
-        <div className="flex items-center justify-center gap-4 mb-6 mt-0 sm:-mt-6 px-6 sm:px-0 -space-x-6 sm:space-x-0">
-          <Image 
-            src={leftArrow} 
-            alt="Left Arrow" 
-            width={68} 
-            height={48} 
-            placeholder="blur"
-            className='inline w-17 h-12 object-cover mt-10 sm:rotate-0 rotate-[-30deg]' 
-          />
+        <div className="flex items-center justify-center gap-4 mb-8 sm:mt-10 px-6 sm:px-0">
           <h1 className="text-2xl font-bold text-gray-800 tracking-tight">
             Haryana <span className="text-red-500">Job</span> Alert is a <span className="text-red-500">FREE</span> Website to get
           </h1>
-          <Image 
-            src={rightArrow} 
-            alt="Right Arrow" 
-            width={68} 
-            height={48} 
-            placeholder="blur"
-            className='inline w-17 h-12 object-cover mt-10 sm:rotate-0 rotate-[30deg]' 
-          />
         </div>
 
         <div className="flex flex-wrap gap-x-3 gap-y-2 justify-center">
@@ -75,45 +57,45 @@ export default function TopLinksSection({ categories }: TopLinksSectionProps) {
 
         <div className="mt-5 hidden sm:flex items-center justify-center gap-4">
           {
-            user?.id ? 
+            user?.id ?
 
-              <button className="shine group w-full sm:w-auto bg-gradient-to-r from-[#222627] to-[#414245] rounded-xl shadow-md px-1 py-1 flex items-center justify-between font-semibold text-white hover:shadow-lg cursor-pointer hover:scale-105 group duration-300 transition-transform hover:bg-gradient-to-b hover:from-[#1c1e47] hover:via-[#2b2d6c] hover:to-[#34387e]" onClick={() => window.location.href= user.role === 'admin' ? '/admin' : '/dashboard'}>
-              <span className='sm:text-sm text-sm pl-3 text-nowrap'>Dashboard</span>
-              <span className="ml-4 w-10 h-10 rounded-lg bg-green-400 group-hover:bg-white object-cover flex items-center justify-center">
-              <Image src={arrow} width={48} height={48} alt='arrow' className='rounded-lg group-hover:hidden block' />
-              <Image src={whiteArrow} width={48} height={48} alt='arrow' className='rounded-lg group-hover:block hidden' />
-              </span>
+              <button className="shine group w-full sm:w-auto bg-gradient-to-r from-[#222627] to-[#414245] rounded-xl shadow-md px-1 py-1 flex items-center justify-between font-semibold text-white hover:shadow-lg cursor-pointer hover:scale-105 group duration-300 transition-transform hover:bg-gradient-to-b hover:from-[#1c1e47] hover:via-[#2b2d6c] hover:to-[#34387e]" onClick={() => window.location.href = user.role === 'admin' ? '/admin' : '/dashboard'}>
+                <span className='sm:text-sm text-sm pl-3 text-nowrap'>Dashboard</span>
+                <span className="ml-4 w-10 h-10 rounded-lg bg-green-400 group-hover:bg-white object-cover flex items-center justify-center">
+                  <Image src={arrow} width={48} height={48} alt='arrow' className='rounded-lg group-hover:hidden block' />
+                  <Image src={whiteArrow} width={48} height={48} alt='arrow' className='rounded-lg group-hover:block hidden' />
+                </span>
               </button>
-             : 
+              :
               <button className="shine group w-full sm:w-auto bg-gradient-to-r from-[#222627] to-[#414245] rounded-xl shadow-md px-1 py-1 flex items-center justify-between font-semibold text-white hover:shadow-lg cursor-pointer hover:scale-105 group duration-300 transition-transform hover:bg-gradient-to-b hover:from-[#1c1e47] hover:via-[#2b2d6c] hover:to-[#34387e]" onClick={() => setShowSignupForm(true)}>
-              <span className='sm:text-sm text-sm pl-3 text-nowrap'>Login / Register</span>
-              <span className="ml-4 w-10 h-10 rounded-lg bg-green-400 group-hover:bg-white object-cover flex items-center justify-center">
-              <Image src={arrow} width={48} height={48} alt='arrow' className='rounded-lg group-hover:hidden block' />
-              <Image src={whiteArrow} width={48} height={48} alt='arrow' className='rounded-lg group-hover:block hidden' />
-              </span>
+                <span className='sm:text-sm text-sm pl-3 text-nowrap'>Login / Register</span>
+                <span className="ml-4 w-10 h-10 rounded-lg bg-green-400 group-hover:bg-white object-cover flex items-center justify-center">
+                  <Image src={arrow} width={48} height={48} alt='arrow' className='rounded-lg group-hover:hidden block' />
+                  <Image src={whiteArrow} width={48} height={48} alt='arrow' className='rounded-lg group-hover:block hidden' />
+                </span>
               </button>
-            
+
           }
-              
+
           <button className="shine w-full sm:w-auto bg-gradient-to-r from-[#222627] to-[#414245] rounded-xl shadow-md p-1 flex items-center justify-between font-semibold text-white hover:shadow-lg transition-transform cursor-pointer hover:scale-105 group duration-300 hover:bg-gradient-to-b hover:from-[#1c1e47] hover:via-[#2b2d6c] hover:to-[#34387e]">
             <a href="https://whatsapp.com/channel/0029VbBbS0R7T8bTQRa9230i" target="_blank" rel="noopener noreferrer" className='w-full flex items-center justify-between'>
-            <span className='text-sm pl-3 text-nowrap'>Join WhatsApp</span>
-            <Image
-              src={wp} 
-              alt="Contact avatar"
-              className="w-10 h-10 rounded-lg ml-4 group-hover:hidden block"
-              width={32}
-              height={32}
-              placeholder="blur"
-            />
-            <Image
-              src={wpIcon} 
-              alt="Contact avatar"
-              className="w-10 h-10 p-1 rounded-lg ml-4 group-hover:block hidden"
-              width={32}
-              height={32}
-              placeholder="blur"
-            />
+              <span className='text-sm pl-3 text-nowrap'>Join WhatsApp</span>
+              <Image
+                src={wp}
+                alt="Contact avatar"
+                className="w-10 h-10 rounded-lg ml-4 group-hover:hidden block"
+                width={32}
+                height={32}
+                placeholder="blur"
+              />
+              <Image
+                src={wpIcon}
+                alt="Contact avatar"
+                className="w-10 h-10 p-1 rounded-lg ml-4 group-hover:block hidden"
+                width={32}
+                height={32}
+                placeholder="blur"
+              />
             </a>
           </button>
         </div>

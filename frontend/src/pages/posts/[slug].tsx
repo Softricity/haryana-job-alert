@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import BannerHeader from "@/components/shared/BannerHeader";
 import Script from "next/script";
+import { useEffect } from "react";
 
 interface Category {
   id: number;
@@ -62,6 +63,20 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
 const PostPage: NextPage<PostPageProps> = ({ post, yojnaPosts, categories, carouselItems }) => {
   const categorySlug = post.categories?.name.toLowerCase().replace(/\s+/g, '-') || 'uncategorized';
+
+  useEffect(() => {
+  if (typeof window !== "undefined" && (window as any).wapTag) {
+    (window as any).wapTag.Init = (window as any).wapTag.Init || [];
+    (window as any).wapTag.Init.push(function () {
+      document.querySelectorAll(".futureads").forEach((el) => {
+        const slot = el.getAttribute("data-ad-slot");
+        if (slot && (window as any).wAPITag) {
+          (window as any).wAPITag.display(slot);
+        }
+      });
+    });
+  }
+}, [post.content_html]);
 
   return (
     <div className="bg-white">

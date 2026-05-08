@@ -28,14 +28,17 @@ export class SupabaseService {
     bucket: string,
     path: string,
   ): Promise<string> {
-    const fileName = `${path}/${Date.now()}-${file.originalname}`;
+    // SAFE FILE NAME
+    const safeFileName = encodeURIComponent(file.originalname);
+
+    const fileName = `${path}/${Date.now()}-${safeFileName}`;
 
     const formData = new FormData();
 
     formData.append(
       'file',
       new Blob([new Uint8Array(file.buffer)]),
-      file.originalname,
+      safeFileName,
     );
 
     const uploadUrl = `${this.supabaseUrl}/object/${bucket}/${fileName}`;
@@ -50,6 +53,7 @@ export class SupabaseService {
 
     if (!response.ok) {
       const errorText = await response.text();
+
       throw new InternalServerErrorException(
         `Failed to upload file to Supabase: ${errorText}`,
       );

@@ -23,25 +23,38 @@ export class SupabaseService {
     this.supabase = createClient(this.supabaseUrl, supabaseKey);
   }
 
-  async uploadFile(file: Express.Multer.File, bucket: string, path: string): Promise<string> {
+  async uploadFile(
+    file: Express.Multer.File,
+    bucket: string,
+    path: string,
+  ): Promise<string> {
     const fileName = `${path}/${Date.now()}-${file.originalname}`;
 
-    const { data, error } = await this.supabase.storage
-      .from(bucket)
-      .upload(fileName, file.buffer, {
-        contentType: file.mimetype,
-        upsert: false,
-      });
+    const formData = new FormData();
 
-    if (error) {
+    formData.append(
+      'file',
+      new Blob([file.buffer]),
+      file.originalname,
+    );
+
+    const uploadUrl = `${this.supabaseUrl}/object/${bucket}/${fileName}`;
+
+    const response = await fetch(uploadUrl, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${this.configService.get('SUPABASE_SERVICE_ROLE_KEY')}`,
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
       throw new InternalServerErrorException(
-        `Failed to upload file to Supabase: ${error.message}`
+        `Failed to upload file to Supabase: ${errorText}`,
       );
     }
 
-    // MANUALLY BUILD PUBLIC URL
-    const publicUrl = `${this.supabaseUrl}/object/public/${bucket}/${data.path}`;
-
-    return publicUrl;
+    return `${this.supabaseUrl}/object/public/${bucket}/${fileName}`;
   }
 }

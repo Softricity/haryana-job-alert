@@ -34,7 +34,7 @@ export class SupabaseService {
 
     formData.append(
       'file',
-      new Blob([file.buffer]),
+      new Blob([new Uint8Array(file.buffer)]),
       file.originalname,
     );
 

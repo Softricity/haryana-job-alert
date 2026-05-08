@@ -34,18 +34,14 @@ export class SupabaseService {
       });
 
     if (error) {
-      // The error.message is what you are seeing: "Unexpected token '<', ..."
-      throw new InternalServerErrorException(`Failed to upload file to Supabase: ${error.message}`);
+      throw new InternalServerErrorException(
+        `Failed to upload file to Supabase: ${error.message}`
+      );
     }
 
-    const { data: publicUrlData } = this.supabase.storage
-      .from(bucket)
-      .getPublicUrl(data.path);
-      
-    if (!publicUrlData) {
-      throw new InternalServerErrorException('Could not retrieve public URL for the uploaded file.');
-    }
+    // MANUALLY BUILD PUBLIC URL
+    const publicUrl = `${this.supabaseUrl}/object/public/${bucket}/${data.path}`;
 
-    return publicUrlData.publicUrl;
+    return publicUrl;
   }
 }

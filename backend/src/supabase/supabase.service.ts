@@ -55,6 +55,6 @@ export class SupabaseService {
       );
     }
 
-    return `https://supabase.theharyanajobalert.com/object/public/${bucket}/${fileName}`;
+    return `https://supabase.theharyanajobalert.com/storage/v1/object/public/${bucket}/${fileName}`;
   }
 }

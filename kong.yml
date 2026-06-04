@@ -2,7 +2,7 @@ _format_version: "2.1"
 
 services:
   - name: auth-v1-open
-    url: http://auth:9999
+    url: http://haryana-auth:9999
     routes:
       - name: auth-v1-open
         strip_path: true
@@ -10,7 +10,7 @@ services:
           - /auth/v1
 
   - name: rest-v1
-    url: http://rest:3000
+    url: http://haryana-rest:3000
     routes:
       - name: rest-v1
         strip_path: true
@@ -18,7 +18,7 @@ services:
           - /rest/v1
 
   - name: realtime-v1
-    url: http://realtime:4000
+    url: http://haryana-realtime:4000
     routes:
       - name: realtime-v1
         strip_path: true
@@ -26,9 +26,25 @@ services:
           - /realtime/v1
 
   - name: storage-v1
-    url: http://storage:5000
+    url: http://haryana-storage:5000
     routes:
       - name: storage-v1
         strip_path: true
         paths:
           - /storage/v1
+
+  - name: meta-v1
+    url: http://haryana-meta:8080
+    routes:
+      - name: meta-v1
+        strip_path: true
+        paths:
+          - /pg
+
+  - name: studio
+    url: http://haryana-studio:3000
+    routes:
+      - name: studio
+        strip_path: true
+        paths:
+          - /studio

@@ -1,9 +1,13 @@
+networks:
+  internal:
+    driver: bridge
+
 services:
   postgres:
     image: public.ecr.aws/supabase/postgres:17.4.1.072
     container_name: haryana-postgres
-    network_mode: host
     restart: unless-stopped
+    networks: [internal]
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: postgres
@@ -13,20 +17,22 @@ services:
   studio:
     image: supabase/studio:latest
     container_name: haryana-studio
-    network_mode: host
     restart: unless-stopped
+    networks: [internal]
     environment:
-      STUDIO_PG_META_URL: http://127.0.0.1:8080
+      STUDIO_PG_META_URL: http://haryana-meta:8080
       POSTGRES_PASSWORD: postgres
       DEFAULT_ORGANIZATION_NAME: Haryana
       DEFAULT_PROJECT_NAME: Haryana Job Alert
-      SUPABASE_URL: http://127.0.0.1:8000
+      SUPABASE_URL: http://haryana-kong:8000
 
   kong:
     image: kong:2.8.1
     container_name: haryana-kong
-    network_mode: host
     restart: unless-stopped
+    networks: [internal]
+    ports:
+      - "127.0.0.1:8000:8000"   # nginx will proxy this
     environment:
       KONG_DATABASE: "off"
       KONG_DECLARATIVE_CONFIG: /kong.yml
@@ -35,30 +41,31 @@ services:
       KONG_PROXY_ERROR_LOG: /dev/stderr
       KONG_ADMIN_ERROR_LOG: /dev/stderr
       KONG_ADMIN_LISTEN: 127.0.0.1:8001
+      KONG_PROXY_LISTEN: 0.0.0.0:8000
     volumes:
       - ./kong.yml:/kong.yml:ro
 
   auth:
     image: supabase/gotrue:v2.177.0
     container_name: haryana-auth
-    network_mode: host
     restart: unless-stopped
+    networks: [internal]
     environment:
       GOTRUE_API_HOST: 0.0.0.0
       GOTRUE_API_PORT: 9999
-      API_EXTERNAL_URL: http://127.0.0.1
+      API_EXTERNAL_URL: https://yourdomain.com
       GOTRUE_DB_DRIVER: postgres
-      GOTRUE_DB_DATABASE_URL: postgres://supabase_admin:postgres@127.0.0.1:5432/postgres
-      GOTRUE_SITE_URL: http://127.0.0.1:3000
+      GOTRUE_DB_DATABASE_URL: postgres://supabase_admin:postgres@haryana-postgres:5432/postgres
+      GOTRUE_SITE_URL: https://yourdomain.com
       GOTRUE_JWT_SECRET: super-secret-jwt-token-with-at-least-32-characters-long
 
   rest:
     image: postgrest/postgrest:latest
     container_name: haryana-rest
-    network_mode: host
     restart: unless-stopped
+    networks: [internal]
     environment:
-      PGRST_DB_URI: postgres://supabase_admin:postgres@127.0.0.1:5432/postgres
+      PGRST_DB_URI: postgres://supabase_admin:postgres@haryana-postgres:5432/postgres
       PGRST_DB_SCHEMA: public
       PGRST_DB_ANON_ROLE: anon
       PGRST_JWT_SECRET: super-secret-jwt-token-with-at-least-32-characters-long
@@ -66,10 +73,10 @@ services:
   realtime:
     image: supabase/realtime:latest
     container_name: haryana-realtime
-    network_mode: host
     restart: unless-stopped
+    networks: [internal]
     environment:
-      DB_HOST: 127.0.0.1
+      DB_HOST: haryana-postgres
       DB_PORT: 5432
       DB_USER: postgres
       DB_PASSWORD: postgres
@@ -80,14 +87,14 @@ services:
   storage:
     image: supabase/storage-api:latest
     container_name: haryana-storage
-    network_mode: host
     restart: unless-stopped
+    networks: [internal]
     environment:
       ANON_KEY: anon-key
       SERVICE_KEY: service-key
-      POSTGREST_URL: http://127.0.0.1:3000
+      POSTGREST_URL: http://haryana-rest:3000
       PGRST_JWT_SECRET: super-secret-jwt-token-with-at-least-32-characters-long
-      DATABASE_URL: postgres://supabase_admin:postgres@127.0.0.1:5432/postgres
+      DATABASE_URL: postgres://supabase_admin:postgres@haryana-postgres:5432/postgres
       FILE_SIZE_LIMIT: 52428800
       STORAGE_BACKEND: file
       FILE_STORAGE_BACKEND_PATH: /var/lib/storage
@@ -97,11 +104,11 @@ services:
   meta:
     image: supabase/postgres-meta:v0.89.0
     container_name: haryana-meta
-    network_mode: host
     restart: unless-stopped
+    networks: [internal]
     environment:
       PG_META_PORT: 8080
-      PG_META_DB_HOST: 127.0.0.1
+      PG_META_DB_HOST: haryana-postgres
       PG_META_DB_PORT: 5432
       PG_META_DB_NAME: postgres
       PG_META_DB_USER: postgres
@@ -110,19 +117,18 @@ services:
   analytics:
     image: supabase/logflare:latest
     container_name: haryana-analytics
-    network_mode: host
     restart: unless-stopped
+    networks: [internal]
     environment:
       LOGFLARE_NODE_HOST: 127.0.0.1
       DB_USERNAME: postgres
       DB_DATABASE: postgres
-      DB_HOSTNAME: 127.0.0.1
+      DB_HOSTNAME: haryana-postgres
       DB_PORT: 5432
       DB_PASSWORD: postgres
 
 volumes:
   supabase_db_haryana-job-alert:
     external: true
-
   supabase_storage_haryana-job-alert:
     external: true

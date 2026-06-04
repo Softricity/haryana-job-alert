@@ -1,0 +1,14 @@
+CREATE ROLE anon NOLOGIN NOINHERIT;
+CREATE ROLE authenticated NOLOGIN NOINHERIT;
+CREATE ROLE service_role NOLOGIN NOINHERIT BYPASSRLS;
+CREATE ROLE supabase_admin LOGIN SUPERUSER PASSWORD 'postgres';
+CREATE ROLE supabase_auth_admin NOLOGIN CREATEROLE;
+CREATE ROLE supabase_storage_admin NOLOGIN;
+
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+CREATE EXTENSION IF NOT EXISTS "pgjwt";
+
+GRANT anon TO postgres;
+GRANT authenticated TO postgres;
+GRANT service_role TO postgres;

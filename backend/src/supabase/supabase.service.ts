@@ -33,29 +33,16 @@ export class SupabaseService {
 
     const fileName = `${path}/${Date.now()}-${safeFileName}`;
 
-    const formData = new FormData();
+    const { data, error } = await this.supabase.storage
+      .from(bucket)
+      .upload(fileName, file.buffer, {
+        contentType: file.mimetype,
+        upsert: false,
+      });
 
-    formData.append(
-      'file',
-      new Blob([new Uint8Array(file.buffer)]),
-      safeFileName,
-    );
-
-    const uploadUrl = `${this.supabaseUrl}/object/${bucket}/${fileName}`;
-
-    const response = await fetch(uploadUrl, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${this.configService.get('SUPABASE_SERVICE_ROLE_KEY')}`,
-      },
-      body: formData,
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-
+    if (error) {
       throw new InternalServerErrorException(
-        `Failed to upload file to Supabase: ${errorText}`,
+        `Failed to upload file to Supabase: ${error.message}`,
       );
     }
 

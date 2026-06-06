@@ -103,11 +103,7 @@ services:
       FILE_STORAGE_BACKEND_PATH: "/var/lib/storage"
       TENANT_ID: "stub"
       PGRST_DB_SCHEMA: "storage"
-    volumes:
-      - supabase_storage_haryana-job-alert:/var/lib/storage
       FILE_SIZE_LIMIT: 52428800
-      STORAGE_BACKEND: file
-      FILE_STORAGE_BACKEND_PATH: /var/lib/storage
     volumes:
       - supabase_storage_haryana-job-alert:/var/lib/storage
 

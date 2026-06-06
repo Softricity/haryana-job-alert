@@ -63,7 +63,7 @@ services:
       GOTRUE_JWT_SECRET: super-secret-jwt-token-with-at-least-32-characters-long
 
   rest:
-    image: postgrest/postgrest:v12.0.2
+    image: postgrest/postgrest:latest
     container_name: haryana-rest
     restart: unless-stopped
     networks: [internal]
@@ -88,7 +88,7 @@ services:
       SECRET_KEY_BASE: super-secret-key-base
 
   storage:
-    image: supabase/storage-api:v1.0.1
+    image: supabase/storage-api:latest
     container_name: haryana-storage
     restart: unless-stopped
     networks: [internal]
@@ -98,6 +98,13 @@ services:
       POSTGREST_URL: http://haryana-rest:3000
       PGRST_JWT_SECRET: super-secret-jwt-token-with-at-least-32-characters-long
       DATABASE_URL: postgres://supabase_admin:postgres@haryana-postgres:5432/postgres
+      REGION: "us-east-1"
+      STORAGE_BACKEND: "file"
+      FILE_STORAGE_BACKEND_PATH: "/var/lib/storage"
+      TENANT_ID: "stub"
+      PGRST_DB_SCHEMA: "storage"
+    volumes:
+      - supabase_storage_haryana-job-alert:/var/lib/storage
       FILE_SIZE_LIMIT: 52428800
       STORAGE_BACKEND: file
       FILE_STORAGE_BACKEND_PATH: /var/lib/storage

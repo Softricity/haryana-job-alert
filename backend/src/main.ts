@@ -34,7 +34,7 @@ async function bootstrap() {
 
   // Enable CORS
   app.enableCors({
-    origin: ['http://localhost:3001', 'http://localhost:3000', "https://theharyanajobalert.com", "https://www.theharyanajobalert.com", "https://tw1lcrj1-3000.inc1.devtunnels.ms", "https://jai-hind-result.vercel.app/"], // Your Next.js app's URL
+    origin: ['http://localhost:3001', 'http://localhost:3000', "https://theharyanajobalert.com", "https://www.theharyanajobalert.com", "https://tw1lcrj1-3000.inc1.devtunnels.ms", "https://jai-hind-result.vercel.app"], // Your Next.js app's URL
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });

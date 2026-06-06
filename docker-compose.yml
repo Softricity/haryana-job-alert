@@ -63,7 +63,7 @@ services:
       GOTRUE_JWT_SECRET: super-secret-jwt-token-with-at-least-32-characters-long
 
   rest:
-    image: postgrest/postgrest:latest
+    image: postgrest/postgrest:v12.0.2
     container_name: haryana-rest
     restart: unless-stopped
     networks: [internal]
@@ -88,7 +88,7 @@ services:
       SECRET_KEY_BASE: super-secret-key-base
 
   storage:
-    image: supabase/storage-api:latest
+    image: supabase/storage-api:v1.0.1
     container_name: haryana-storage
     restart: unless-stopped
     networks: [internal]

@@ -1,5 +1,5 @@
 import { IsString, IsNotEmpty, IsOptional, IsInt, IsObject, IsEnum } from 'class-validator';
-import { question_type } from '../../../generated/prisma';
+import { question_type } from '@prisma/client';
 
 export class CreateMockQuestionDto {
   @IsInt()

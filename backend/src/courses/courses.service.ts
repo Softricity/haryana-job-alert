@@ -16,7 +16,7 @@ import { SupabaseService } from '../supabase/supabase.service';
 import { CourseStatus, Prisma } from '@prisma/client';
 import { ReorderTopicsDto } from './dto/reorder-topics.dto';
 import { ReorderLessonsDto } from './dto/reorder-lessons.dto';
-import { enrollment_status, CoursePricingModel, payment_status } from '../../generated/prisma';
+import { enrollment_status, CoursePricingModel, payment_status } from '@prisma/client';
 
 // Helper function to convert HH:MM to seconds
 const timeToSeconds = (time?: string | null): number | null => {

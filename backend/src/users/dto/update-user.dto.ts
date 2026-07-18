@@ -1,5 +1,5 @@
 import { IsEmail, IsEnum, IsOptional, IsString, MinLength } from 'class-validator';
-import { user_role } from '../../../generated/prisma'; // Import the enum from Prisma
+import { user_role } from '@prisma/client'; // Import the enum from Prisma
 
 export class UpdateUserDto {
   @IsString()

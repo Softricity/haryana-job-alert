@@ -13,7 +13,7 @@ import {
   Matches,
 } from 'class-validator';
 import { Transform } from 'class-transformer';
-import { CoursePricingModel, CourseStatus } from '../../../generated/prisma'; // Assuming generated prisma client location
+import { CoursePricingModel, CourseStatus } from '@prisma/client'; // Assuming generated prisma client location
 
 // Helper function to convert HH:MM to seconds
 const timeToSeconds = (time: string): number | null => {
